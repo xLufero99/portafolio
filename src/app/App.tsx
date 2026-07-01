@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import fotoMia from '../assets/foto_mia.png';
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 1. DATOS GLOBALES (se usan en varias secciones)
+// 1. DATOS GLOBALES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 interface Project {
@@ -17,6 +17,12 @@ interface Service {
   number: string;
   title: string;
   description: string;
+}
+
+interface TechSkill {
+  name: string;
+  icon: string;
+  level: number;
 }
 
 const PROJECTS: Project[] = [
@@ -77,7 +83,93 @@ const SERVICES: Service[] = [
   },
 ];
 
-const SECTION_NAMES = ["Home", "Work", "Services", "About", "Contact"];
+const TECH_SKILLS: TechSkill[] = [
+  { 
+    name: "React", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", 
+    level: 95 
+  },
+  { 
+    name: "TypeScript", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg", 
+    level: 90 
+  },
+  { 
+    name: "Next.js", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg", 
+    level: 88 
+  },
+  { 
+    name: "Node.js", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg", 
+    level: 85 
+  },
+  { 
+    name: "Python", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg", 
+    level: 80 
+  },
+  { 
+    name: "Tailwind CSS", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg", 
+    level: 92 
+  },
+  { 
+    name: "GraphQL", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg", 
+    level: 78 
+  },
+  { 
+    name: "Docker", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", 
+    level: 75 
+  },
+  { 
+    name: "PostgreSQL", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", 
+    level: 82 
+  },
+  { 
+    name: "MongoDB", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg", 
+    level: 80 
+  },
+  { 
+    name: "Figma", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg", 
+    level: 85 
+  },
+  { 
+    name: "AWS", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg", 
+    level: 70 
+  },
+  { 
+    name: "Git", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", 
+    level: 88 
+  },
+  { 
+    name: "JavaScript", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg", 
+    level: 92 
+  },
+  { 
+    name: "HTML5", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg", 
+    level: 90 
+  },
+  { 
+    name: "CSS3", 
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg", 
+    level: 88 
+  },
+];
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION_NAMES actualizado (Home, About, Work, Services, Contact)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const SECTION_NAMES = ["Home", "About", "Work", "Services", "Contact"];
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 2. COMPONENTE PRINCIPAL
@@ -100,7 +192,12 @@ export default function App() {
   const cursorCurrentRef = useRef({ x: -200, y: -200 });
   const cursorDivRef = useRef<HTMLDivElement>(null);
   const isOnProjectRef = useRef(false);
-  const photoWrapRef = useRef<HTMLDivElement>(null); // ✅ Este ref se asigna correctamente ahora
+  const photoWrapRef = useRef<HTMLDivElement>(null);
+
+  // ─── Refs para animaciones de la sección Hero ─────────────
+  const heroRef = useRef<HTMLElement>(null);
+  const heroContentRef = useRef<HTMLDivElement>(null);
+  const heroPhotoRef = useRef<HTMLDivElement>(null);
 
   // ─── Efecto: Cursor suave ─────────────────────────────────
   useEffect(() => {
@@ -121,7 +218,7 @@ export default function App() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  // ─── 👇 EFECTO PARALLAX EN LA FOTO (CORREGIDO) ────────────
+  // ─── Efecto Parallax en la foto ────────────────────────────
   useEffect(() => {
     let raf: number;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -133,7 +230,6 @@ export default function App() {
       const nx = mouseMxRef.current;
       const ny = mouseMyRef.current;
       
-      // Movimiento en dirección OPUESTA al mouse
       photoTarget.x = (0.5 - nx) * 30;
       photoTarget.y = (0.5 - ny) * 30;
       
@@ -255,6 +351,50 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  // ─── 👇 NUEVO: Efecto para reiniciar animaciones de Hero al hacer scroll ──
+  useEffect(() => {
+    if (!heroRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Reiniciar animación del contenido textual (FullStack DV + Daniel Gomez)
+            if (heroContentRef.current) {
+              const el = heroContentRef.current;
+              // Quitar transiciones temporalmente para resetear
+              el.style.transition = 'none';
+              el.style.opacity = '0';
+              el.style.transform = 'translateY(40px)';
+              // Forzar reflow
+              void el.offsetHeight;
+              // Restaurar transición y valores finales
+              el.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s';
+              el.style.opacity = '1';
+              el.style.transform = 'translateY(0)';
+            }
+
+            // Reiniciar animación de la foto
+            if (heroPhotoRef.current) {
+              const el = heroPhotoRef.current;
+              el.style.transition = 'none';
+              el.style.opacity = '0';
+              el.style.transform = 'translateY(60px)';
+              void el.offsetHeight;
+              el.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s';
+              el.style.opacity = '1';
+              el.style.transform = 'translateY(0)';
+            }
+          }
+        });
+      },
+      { threshold: 0.3 } // Se activa cuando el 30% de la sección es visible
+    );
+
+    observer.observe(heroRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   // ─── Funciones globales ────────────────────────────────────
   const scrollTo = (idx: number) => {
     document
@@ -274,7 +414,7 @@ export default function App() {
   };
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // 3. RENDER: ELEMENTOS GLOBALES
+  // 3. RENDER
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   return (
@@ -311,7 +451,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* ─── LOGO (siempre visible) ────────────────────────── */}
+      {/* ─── LOGO ────────────────────────────────────────── */}
       <div className="fixed top-7 left-8 z-50 mix-blend-difference select-none">
         <span className="text-white font-bold text-sm" style={{ letterSpacing: "0.15em" }}>
           LUFERO
@@ -348,52 +488,52 @@ export default function App() {
         />
       </button>
 
-      {/* ─── NAVEGACIÓN DE PUNTITOS ──────────────────────── */}
-<div className="fixed left-7 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
-  {SECTION_NAMES.map((_, idx) => (
-    <button
-      key={idx}
-      onClick={() => scrollTo(idx)}
-      aria-label={SECTION_NAMES[idx]}
-      className={`rounded-full border border-white transition-all duration-300 ${
-        activeSection === idx 
-          ? "bg-white w-3 h-3" 
-          : "bg-transparent w-3 h-3 opacity-40 hover:opacity-80"
-      }`}
-    />
-  ))}
-</div>
+      {/* ─── NAVEGACIÓN DE PUNTITOS (más grandes) ────────── */}
+      <div className="fixed left-7 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+        {SECTION_NAMES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => scrollTo(idx)}
+            aria-label={SECTION_NAMES[idx]}
+            className={`rounded-full border border-white transition-all duration-300 ${
+              activeSection === idx 
+                ? "bg-white w-3 h-3" 
+                : "bg-transparent w-3 h-3 opacity-40 hover:opacity-80"
+            }`}
+          />
+        ))}
+      </div>
 
-     {/* ─── TEXTO "SCROLL" ──────────────────────────────── */}
-<div className="fixed bottom-8 left-8 z-50 mix-blend-difference">
-  <span
-    className="text-white/70 font-medium"
-    style={{
-      writingMode: "vertical-lr",
-      transform: "rotate(180deg)",
-      letterSpacing: "0.25em",
-      textTransform: "uppercase",
-      fontSize: "14px", // ← TAMAÑO AUMENTADO
-    }}
-  >
-    Scroll
-  </span>
-</div>
+      {/* ─── TEXTO "SCROLL" (más grande) ──────────────────── */}
+      <div className="fixed bottom-8 left-8 z-50 mix-blend-difference">
+        <span
+          className="text-white/70 font-medium"
+          style={{
+            writingMode: "vertical-lr",
+            transform: "rotate(180deg)",
+            letterSpacing: "0.25em",
+            textTransform: "uppercase",
+            fontSize: "14px",
+          }}
+        >
+          Scroll
+        </span>
+      </div>
 
-    {/* ─── TEXTO "PORTFOLIO" ───────────────────────────── */}
-<div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
-  <span
-    className="text-white/70 font-medium"
-    style={{
-      writingMode: "vertical-lr",
-      letterSpacing: "0.25em",
-      textTransform: "uppercase",
-      fontSize: "14px", // ← TAMAÑO AUMENTADO
-    }}
-  >
-    Portfolio
-  </span>
-</div>
+      {/* ─── TEXTO "PORTFOLIO" (más grande) ──────────────── */}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
+        <span
+          className="text-white/70 font-medium"
+          style={{
+            writingMode: "vertical-lr",
+            letterSpacing: "0.25em",
+            textTransform: "uppercase",
+            fontSize: "14px",
+          }}
+        >
+          Portfolio
+        </span>
+      </div>
 
       {/* ─── LÍNEA DECORATIVA DERECHA ────────────────────── */}
       <div
@@ -445,16 +585,17 @@ export default function App() {
       </div>
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          4. CONTENEDOR SCROLL (todas las secciones)
+          4. CONTENEDOR SCROLL
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <div
         className="h-screen overflow-y-scroll"
         style={{ scrollSnapType: "y mandatory" }}
       >
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            5. SECCIÓN HERO - CORREGIDA
+            5. SECCIÓN HERO (index 0) - CON ANIMACIONES AL SCROLL
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
+          ref={heroRef}
           data-section-index="0"
           style={{
             height: "100vh",
@@ -464,7 +605,6 @@ export default function App() {
             scrollSnapAlign: "start",
           }}
         >
-          {/* Inset teal card */}
           <div
             style={{
               position: "absolute",
@@ -478,7 +618,6 @@ export default function App() {
               transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s",
             }}
           >
-            {/* Animated wave canvas */}
             <canvas
               ref={canvasRef}
               style={{
@@ -492,8 +631,9 @@ export default function App() {
               }}
             />
 
-            {/* Role label + name */}
+            {/* Contenido textual (FullStack DV + Daniel Gomez) */}
             <div
+              ref={heroContentRef}
               style={{
                 position: "absolute",
                 bottom: "30%",
@@ -501,7 +641,7 @@ export default function App() {
                 zIndex: 15,
                 opacity: 1,
                 transform: "translateY(0)",
-                transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s",
+                transition: "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s",
               }}
             >
               <span
@@ -533,9 +673,9 @@ export default function App() {
               </h1>
             </div>
 
-            {/* ─── 👇 FOTO CON PARALLAX (CORREGIDO) ─── */}
+            {/* Foto */}
             <div
-              ref={photoWrapRef} // ✅ AHORA SÍ SE ASIGNA EL REF
+              ref={heroPhotoRef}
               style={{
                 position: "absolute",
                 right: "10%",
@@ -546,11 +686,13 @@ export default function App() {
                 overflow: "visible",
                 pointerEvents: "none",
                 opacity: 1,
-                transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s",
+                transform: "translateY(0)",
+                transition: "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s",
                 willChange: "transform",
               }}
             >
               <div
+                ref={photoWrapRef}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -565,10 +707,168 @@ export default function App() {
         </section>
 
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            6. SECCIÓN WORK
+            SECCIÓN ABOUT ME (index 1)
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="1"
+          className="relative min-h-screen flex items-center overflow-hidden"
+          style={{ 
+            backgroundColor: "#0A0A0A", 
+            scrollSnapAlign: "start",
+            padding: "80px 0"
+          }}
+        >
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-20 right-20 w-96 h-96 bg-[#3DCFC4] rounded-full blur-3xl" />
+            <div className="absolute bottom-20 left-20 w-80 h-80 bg-blue-500 rounded-full blur-3xl" />
+          </div>
+
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
+            <div className="mb-16">
+              <span
+                className="font-medium"
+                style={{ 
+                  fontSize: "13px", 
+                  letterSpacing: "0.12em", 
+                  textTransform: "uppercase", 
+                  color: "#3DCFC4" 
+                }}
+              >
+                Sobre Mí
+              </span>
+              <h2
+                className="text-white font-bold mt-3"
+                style={{ 
+                  fontSize: "clamp(36px, 5vw, 64px)", 
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.02em"
+                }}
+              >
+                FullStack Developer
+                <br />
+                <span style={{ color: "#3DCFC4" }}>Creativo & Versátil</span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+              <div>
+                <p
+                  className="text-white/70 leading-relaxed mb-6"
+                  style={{ fontSize: "18px", lineHeight: 1.8 }}
+                >
+                  Soy <span className="text-white font-semibold">Daniel Gomez</span>, 
+                  un desarrollador fullstack apasionado por crear experiencias digitales 
+                  únicas y funcionales. Con más de 6 años de experiencia, 
+                  combino la <span className="text-[#3DCFC4]">precisión técnica</span> 
+                  con un enfoque <span className="text-[#3DCFC4]">creativo</span> 
+                  para construir soluciones que realmente conectan con los usuarios.
+                </p>
+                <p
+                  className="text-white/50 leading-relaxed mb-8"
+                  style={{ fontSize: "16px", lineHeight: 1.8 }}
+                >
+                  Especializado en el ecosistema JavaScript/TypeScript, 
+                  desarrollo de aplicaciones escalables y diseño de interfaces 
+                  intuitivas. Siempre explorando nuevas tecnologías y 
+                  metodologías para mantenerse a la vanguardia.
+                </p>
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { n: "6+", l: "Años de experiencia" },
+                    { n: "50+", l: "Proyectos completados" },
+                    { n: "30+", l: "Clientes satisfechos" },
+                  ].map((stat) => (
+                    <div key={stat.l} className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
+                      <span className="block text-[#3DCFC4] font-bold text-2xl">
+                        {stat.n}
+                      </span>
+                      <span className="text-white/40 text-xs uppercase tracking-wider">
+                        {stat.l}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3
+                  className="text-white font-semibold mb-6"
+                  style={{ fontSize: "18px", letterSpacing: "0.1em", textTransform: "uppercase" }}
+                >
+                  <span className="text-[#3DCFC4]">//</span> Tecnologías que domino
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {TECH_SKILLS.map((skill) => (
+                    <div
+                      key={skill.name}
+                      className="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#3DCFC4]/10 border border-white/5 hover:border-[#3DCFC4]/30"
+                    >
+                      <div className="flex flex-col items-center text-center">
+                        <img 
+                          src={skill.icon} 
+                          alt={skill.name}
+                          className="w-10 h-10 mb-2 opacity-80 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110"
+                          style={{ filter: "brightness(0) invert(1)" }}
+                        />
+                        <span className="text-white/80 text-xs font-medium mb-1">
+                          {skill.name}
+                        </span>
+                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all duration-1000"
+                            style={{
+                              width: `${skill.level}%`,
+                              backgroundColor: "#3DCFC4",
+                              opacity: 0.6,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-16 pt-12 border-t border-white/10 flex flex-wrap items-center justify-between gap-6">
+              <div className="flex items-center gap-6">
+                <span className="text-white/30 text-sm uppercase tracking-wider">
+                  Disponible para
+                </span>
+                <span className="text-[#3DCFC4] font-semibold text-lg">
+                  Freelance & Full-time
+                </span>
+                <div className="flex gap-2">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-green-500 text-xs">Disponible</span>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                {[
+                  { name: "GitHub", url: "https://github.com" },
+                  { name: "LinkedIn", url: "https://linkedin.com" },
+                  { name: "Twitter", url: "https://twitter.com" }
+                ].map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/40 hover:text-[#3DCFC4] transition-colors duration-200 text-sm uppercase tracking-wider hover:scale-105 transform"
+                  >
+                    {social.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            SECCIÓN WORK (index 2)
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+        <section
+          data-section-index="2"
           className="relative h-screen overflow-hidden"
           style={{ backgroundColor: "#0A0A0A", scrollSnapAlign: "start" }}
         >
@@ -637,10 +937,10 @@ export default function App() {
         </section>
 
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            7. SECCIÓN SERVICES
+            SECCIÓN SERVICES (index 3)
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
-          data-section-index="2"
+          data-section-index="3"
           className="relative h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24"
           style={{ backgroundColor: "#0A0A0A", scrollSnapAlign: "start" }}
         >
@@ -712,68 +1012,7 @@ export default function App() {
         </section>
 
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            8. SECCIÓN ABOUT
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section
-          data-section-index="3"
-          className="relative h-screen flex flex-col md:flex-row items-stretch overflow-hidden"
-          style={{ backgroundColor: "#111111", scrollSnapAlign: "start" }}
-        >
-          <div className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden bg-card">
-            <img
-              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&h=1080&fit=crop&auto=format"
-              alt="Creative studio at work"
-              className="w-full h-full object-cover"
-              style={parallax(14)}
-            />
-            <div
-              className="absolute inset-0"
-              style={{ background: "linear-gradient(135deg, rgba(61,207,196,0.08) 0%, rgba(0,0,0,0.4) 100%)" }}
-            />
-          </div>
-
-          <div className="w-full md:w-1/2 flex flex-col justify-center px-8 md:px-16 py-12 md:py-24">
-            <span
-              className="block mb-8 font-medium"
-              style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#3DCFC4" }}
-            >
-              About Phoenix
-            </span>
-            <h2
-              className="text-white font-black uppercase mb-8"
-              style={{ fontSize: "clamp(30px, 4.5vw, 68px)", lineHeight: 0.95, letterSpacing: "-0.02em" }}
-            >
-              Studio for
-              <br />
-              the Bold &
-              <br />
-              <span style={{ color: "#3DCFC4" }}>Unexpected.</span>
-            </h2>
-            <p
-              className="mb-10 leading-relaxed"
-              style={{ fontSize: "15px", color: "rgba(255,255,255,0.55)", maxWidth: "380px", lineHeight: 1.75 }}
-            >
-              We partner with brands that refuse the ordinary. From concept through final delivery, we bring cinematic precision and editorial clarity to every project we touch.
-            </p>
-            <p
-              className="mb-12 leading-relaxed"
-              style={{ fontSize: "15px", color: "rgba(255,255,255,0.35)", maxWidth: "380px", lineHeight: 1.75 }}
-            >
-              Founded in New York, operating globally. Our team of directors, designers, and strategists treats every brief as an opportunity to make something that earns its place in culture.
-            </p>
-            <button
-              onClick={() => scrollTo(4)}
-              className="self-start flex items-center gap-3 font-semibold transition-colors duration-200"
-              style={{ fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase", color: "#3DCFC4" }}
-            >
-              Work with Us
-              <span style={{ color: "#00E5D1", fontSize: "18px" }}>↘</span>
-            </button>
-          </div>
-        </section>
-
-        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            9. SECCIÓN CONTACT
+            SECCIÓN CONTACT (index 4)
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="4"
