@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import fotoMia from '../assets/foto_mia.png';
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 1. DATOS GLOBALES (se usan en varias secciones)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -99,7 +100,8 @@ export default function App() {
   const cursorCurrentRef = useRef({ x: -200, y: -200 });
   const cursorDivRef = useRef<HTMLDivElement>(null);
   const isOnProjectRef = useRef(false);
-  const photoWrapRef = useRef<HTMLDivElement>(null); 
+  const photoWrapRef = useRef<HTMLDivElement>(null); // ✅ Este ref se asigna correctamente ahora
+
   // ─── Efecto: Cursor suave ─────────────────────────────────
   useEffect(() => {
     let raf: number;
@@ -119,60 +121,35 @@ export default function App() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-
-// ─── Efecto: Cursor suave ─────────────────────────────────
-useEffect(() => {
-  let raf: number;
-  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-  const tick = () => {
-    cursorCurrentRef.current.x = lerp(cursorCurrentRef.current.x, cursorTargetRef.current.x, 0.12);
-    cursorCurrentRef.current.y = lerp(cursorCurrentRef.current.y, cursorTargetRef.current.y, 0.12);
-
-    if (cursorDivRef.current) {
-      const offset = isOnProjectRef.current ? 40 : 4;
-      cursorDivRef.current.style.transform = `translate(${cursorCurrentRef.current.x - offset}px, ${cursorCurrentRef.current.y - offset}px)`;
-    }
-    raf = requestAnimationFrame(tick);
-  };
-  raf = requestAnimationFrame(tick);
-  return () => cancelAnimationFrame(raf);
-}, []);
-
-// ─── 👇 NUEVO: Efecto Parallax en la foto ──────────────────
-useEffect(() => {
-  let raf: number;
-  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-  
-  const photoTarget = { x: 0, y: 0 };
-  const photoCurrent = { x: 0, y: 0 };
-
-  const tick = () => {
-    const nx = mouseMxRef.current;
-    const ny = mouseMyRef.current;
+  // ─── 👇 EFECTO PARALLAX EN LA FOTO (CORREGIDO) ────────────
+  useEffect(() => {
+    let raf: number;
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     
-    // Movimiento en dirección OPUESTA al mouse
-    photoTarget.x = (0.5 - nx) * 30;
-    photoTarget.y = (0.5 - ny) * 30;
-    
-    photoCurrent.x = lerp(photoCurrent.x, photoTarget.x, 0.08);
-    photoCurrent.y = lerp(photoCurrent.y, photoTarget.y, 0.08);
-    
-    if (photoWrapRef.current) {
-      photoWrapRef.current.style.transform = `translate(${photoCurrent.x}px, ${photoCurrent.y}px)`;
-    }
+    const photoTarget = { x: 0, y: 0 };
+    const photoCurrent = { x: 0, y: 0 };
+
+    const tick = () => {
+      const nx = mouseMxRef.current;
+      const ny = mouseMyRef.current;
+      
+      // Movimiento en dirección OPUESTA al mouse
+      photoTarget.x = (0.5 - nx) * 30;
+      photoTarget.y = (0.5 - ny) * 30;
+      
+      photoCurrent.x = lerp(photoCurrent.x, photoTarget.x, 0.08);
+      photoCurrent.y = lerp(photoCurrent.y, photoTarget.y, 0.08);
+      
+      if (photoWrapRef.current) {
+        photoWrapRef.current.style.transform = `translate(${photoCurrent.x}px, ${photoCurrent.y}px)`;
+      }
+      
+      raf = requestAnimationFrame(tick);
+    };
     
     raf = requestAnimationFrame(tick);
-  };
-  
-  raf = requestAnimationFrame(tick);
-  return () => cancelAnimationFrame(raf);
-}, []);
-// ─── Fin del nuevo efecto ──────────────────────────────────
-
-
-
-
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   // ─── Efecto: Seguimiento del mouse ────────────────────────
   useEffect(() => {
@@ -297,7 +274,7 @@ useEffect(() => {
   };
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // 3. RENDER: ELEMENTOS GLOBALES (aparecen en TODAS las páginas)
+  // 3. RENDER: ELEMENTOS GLOBALES
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   return (
@@ -341,7 +318,7 @@ useEffect(() => {
         </span>
       </div>
 
-      {/* ─── MENÚ HAMBURGUESA (siempre visible) ────────────── */}
+      {/* ─── MENÚ HAMBURGUESA ────────────────────────────── */}
       <button
         className="fixed top-6 right-8 z-50 mix-blend-difference flex flex-col gap-[5px] p-2 group"
         onClick={() => setMenuOpen((v) => !v)}
@@ -371,50 +348,54 @@ useEffect(() => {
         />
       </button>
 
-      {/* ─── NAVEGACIÓN DE PUNTITOS (siempre visible) ──────── */}
-      <div className="fixed left-7 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
-        {SECTION_NAMES.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => scrollTo(idx)}
-            aria-label={SECTION_NAMES[idx]}
-            className={`rounded-full border border-white transition-all duration-300 ${
-              activeSection === idx ? "bg-white w-2 h-2" : "bg-transparent w-2 h-2 opacity-40 hover:opacity-80"
-            }`}
-          />
-        ))}
-      </div>
+      {/* ─── NAVEGACIÓN DE PUNTITOS ──────────────────────── */}
+<div className="fixed left-7 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+  {SECTION_NAMES.map((_, idx) => (
+    <button
+      key={idx}
+      onClick={() => scrollTo(idx)}
+      aria-label={SECTION_NAMES[idx]}
+      className={`rounded-full border border-white transition-all duration-300 ${
+        activeSection === idx 
+          ? "bg-white w-3 h-3" 
+          : "bg-transparent w-3 h-3 opacity-40 hover:opacity-80"
+      }`}
+    />
+  ))}
+</div>
 
-      {/* ─── TEXTO "SCROLL" (siempre visible) ──────────────── */}
-      <div className="fixed bottom-8 left-8 z-50 mix-blend-difference">
-        <span
-          className="text-white/70 text-[10px] font-medium"
-          style={{
-            writingMode: "vertical-lr",
-            transform: "rotate(180deg)",
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-          }}
-        >
-          Scroll
-        </span>
-      </div>
+     {/* ─── TEXTO "SCROLL" ──────────────────────────────── */}
+<div className="fixed bottom-8 left-8 z-50 mix-blend-difference">
+  <span
+    className="text-white/70 font-medium"
+    style={{
+      writingMode: "vertical-lr",
+      transform: "rotate(180deg)",
+      letterSpacing: "0.25em",
+      textTransform: "uppercase",
+      fontSize: "14px", // ← TAMAÑO AUMENTADO
+    }}
+  >
+    Scroll
+  </span>
+</div>
 
-      {/* ─── TEXTO "PORTFOLIO" (siempre visible) ───────────── */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
-        <span
-          className="text-white/70 text-[10px] font-medium"
-          style={{
-            writingMode: "vertical-lr",
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-          }}
-        >
-          Portfolio
-        </span>
-      </div>
+    {/* ─── TEXTO "PORTFOLIO" ───────────────────────────── */}
+<div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
+  <span
+    className="text-white/70 font-medium"
+    style={{
+      writingMode: "vertical-lr",
+      letterSpacing: "0.25em",
+      textTransform: "uppercase",
+      fontSize: "14px", // ← TAMAÑO AUMENTADO
+    }}
+  >
+    Portfolio
+  </span>
+</div>
 
-      {/* ─── LÍNEA DECORATIVA DERECHA (siempre visible) ────── */}
+      {/* ─── LÍNEA DECORATIVA DERECHA ────────────────────── */}
       <div
         className="fixed right-16 z-40 w-px"
         style={{
@@ -463,159 +444,129 @@ useEffect(() => {
         </div>
       </div>
 
-      // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      // 4. CONTENEDOR SCROLL (todas las secciones)
-      // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          4. CONTENEDOR SCROLL (todas las secciones)
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <div
         className="h-screen overflow-y-scroll"
         style={{ scrollSnapType: "y mandatory" }}
       >
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            5. SECCIÓN HERO - CORREGIDA
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+        <section
+          data-section-index="0"
+          style={{
+            height: "100vh",
+            position: "relative",
+            backgroundColor: "#0A0A0A",
+            overflow: "hidden",
+            scrollSnapAlign: "start",
+          }}
+        >
+          {/* Inset teal card */}
+          <div
+            style={{
+              position: "absolute",
+              left: "14vw",
+              right: "12vw",
+              top: "20vh",
+              bottom: "1vh",
+              backgroundColor: "#3DCFC4",
+              overflow: "hidden",
+              opacity: 1,
+              transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s",
+            }}
+          >
+            {/* Animated wave canvas */}
+            <canvas
+              ref={canvasRef}
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: "100%",
+                height: "48%",
+                display: "block",
+                zIndex: 1,
+              }}
+            />
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 5. SECCIÓN HERO (página 1)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            {/* Role label + name */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "30%",
+                left: "17%",
+                zIndex: 15,
+                opacity: 1,
+                transform: "translateY(0)",
+                transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s",
+              }}
+            >
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "clamp(24px, 4vw, 50px)",
+                  fontWeight: 400,
+                  color: "rgba(0,0,0,0.6)",
+                  marginBottom: "clamp(20px, 5vh, 60px)",
+                  marginLeft: "15px",
+                  letterSpacing: "0.09em",
+                }}
+              >
+                FullStack DV
+              </span>
+              <h1
+                style={{
+                  margin: 0,
+                  fontSize: "clamp(60px, 15vw, 200px)",
+                  fontWeight: 700,
+                  color: "#FFFFFF",
+                  lineHeight: 0.85,
+                  letterSpacing: "-0.0em",
+                }}
+              >
+                Daniel
+                <br />
+                Gomez
+              </h1>
+            </div>
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECCIÓN HERO (página 1) - VERSIÓN CORREGIDA
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            {/* ─── 👇 FOTO CON PARALLAX (CORREGIDO) ─── */}
+            <div
+              ref={photoWrapRef} // ✅ AHORA SÍ SE ASIGNA EL REF
+              style={{
+                position: "absolute",
+                right: "10%",
+                bottom: "0",
+                width: "min(455px, 60vw)",
+                height: "min(698px, 90vh)",
+                zIndex: 10,
+                overflow: "visible",
+                pointerEvents: "none",
+                opacity: 1,
+                transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s",
+                willChange: "transform",
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: `url(${fotoMia})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center bottom",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            </div>
+          </div>
+        </section>
 
-{/* ══════════════════════ HERO ══════════════════════════════════════ */}
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECCIÓN HERO (página 1) - VERSIÓN CORREGIDA
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-{/* ══════════════════════ HERO ══════════════════════════════════════ */}
-<section
-  data-si="0"
-  style={{
-    height: "100vh",
-    position: "relative",
-    backgroundColor: "#0A0A0A",
-    overflow: "hidden",
-    scrollSnapAlign: "start",
-  }}
->
-
-{/* Inset teal card — leaves black visible on all sides */}
-<div
-  style={{
-    position: "absolute",
-    left: "14vw",
-    right: "12vw",
-    top: "20vh",
-    bottom: "1vh",
-    backgroundColor: "#3DCFC4",
-    overflow: "visible",
-    opacity: 1,
-    transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s",
-  }}
->
-  {/* Animated wave canvas — sits at bottom of card */}
-  <canvas
-    ref={canvasRef}
-    style={{
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      width: "100%",
-      height: "48%",
-      display: "block",
-      zIndex: 1,
-    }}
-  />
-
-  {/* Role label + name — bottom-left of card */}
-  <div
-    style={{
-      position: "absolute",
-      bottom: "30%",
-      left: "17%",
-      zIndex: 15,
-      opacity: 1,
-      transform: "translateY(0)",
-      transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s",
-    }}
-  >
-    <span
-      style={{
-        display: "block",
-        fontSize: "50px",
-        fontWeight: 400,
-        color: "rgba(0,0,0,0.6)",
-        marginBottom: "60px",
-        marginLeft: "15px",
-        letterSpacing: "0.09em",
-      }}
-    >
-      FullStack DV
-    </span>
-    <h1
-      style={{
-        margin: 0,
-        fontSize: "clamp(120px, 15vw, 200px)",
-        fontWeight: 700,
-        color: "#FFFFFF",
-        lineHeight: 0.85,
-        letterSpacing: "-0.0em",
-      }}
-    >
-      Daniel
-      <br />
-      Gomez
-    </h1>
-  </div>
-
-  {/* ─── 👇 FOTO DENTRO DEL DIV VERDE ─── */}
- {/* ─── FOTO DENTRO DEL DIV VERDE ─── */}
-
-{/* ─── FOTO DENTRO DEL DIV VERDE ─── */}
-<div
-  style={{
-    position: "absolute",
-    right: "10%",
-    bottom: "0",              // ← ANCLADA ABAJO
-    width: "455px",
-    height: "698px",
-    zIndex: 10,
-    overflow: "visible",
-    pointerEvents: "none",
-    opacity: 1,
-    transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s",
-    backgroundImage: `url(${fotoMia})`,
-    backgroundSize: "cover",
-    backgroundPosition: " center",   // ← ANCLADA ABAJO
-    backgroundRepeat: "no-repeat",
-  }}
-/>
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-</section>
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 6. SECCIÓN WORK (página 2)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            6. SECCIÓN WORK
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="1"
           className="relative h-screen overflow-hidden"
@@ -634,7 +585,7 @@ useEffect(() => {
             2023 – 2024
           </div>
 
-          <div className="grid grid-cols-2 h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 h-full">
             {PROJECTS.map((project) => (
               <div
                 key={project.id}
@@ -650,7 +601,6 @@ useEffect(() => {
                     style={parallax(10)}
                   />
                 </div>
-                {/* Gradient overlay */}
                 <div
                   className="absolute inset-0 transition-opacity duration-500"
                   style={{
@@ -658,7 +608,6 @@ useEffect(() => {
                     opacity: 1,
                   }}
                 />
-                {/* Card info */}
                 <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
                   <span
                     className="block mb-2 font-medium"
@@ -681,20 +630,18 @@ useEffect(() => {
                     </span>
                   </div>
                 </div>
-                {/* Thin border between cells */}
                 <div className="absolute inset-0 border border-white/[0.05] pointer-events-none" />
               </div>
             ))}
           </div>
         </section>
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 7. SECCIÓN SERVICES (página 3)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            7. SECCIÓN SERVICES
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="2"
-          className="relative h-screen flex flex-col justify-center px-16 md:px-24"
+          className="relative h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24"
           style={{ backgroundColor: "#0A0A0A", scrollSnapAlign: "start" }}
         >
           <div className="mb-14">
@@ -710,9 +657,9 @@ useEffect(() => {
             {SERVICES.map((service, idx) => (
               <div
                 key={service.number}
-                className={`group flex items-center gap-10 py-7 transition-colors duration-200 hover:bg-white/[0.025] ${
+                className={`group flex flex-wrap items-center gap-6 md:gap-10 py-7 transition-colors duration-200 hover:bg-white/[0.025] ${
                   idx !== SERVICES.length - 1 ? "border-b border-white/10" : ""
-                } ${idx % 2 === 1 ? "flex-row-reverse" : ""}`}
+                }`}
               >
                 <span
                   className="w-10 flex-shrink-0 font-medium"
@@ -721,13 +668,13 @@ useEffect(() => {
                   {service.number}
                 </span>
                 <h3
-                  className="text-white font-bold uppercase flex-1 min-w-0"
-                  style={{ fontSize: "clamp(22px, 3.2vw, 52px)", lineHeight: 1.05, letterSpacing: "-0.01em" }}
+                  className="text-white font-bold uppercase flex-1 min-w-[200px]"
+                  style={{ fontSize: "clamp(18px, 3.2vw, 52px)", lineHeight: 1.05, letterSpacing: "-0.01em" }}
                 >
                   {service.title}
                 </h3>
                 <p
-                  className="flex-shrink-0 leading-relaxed"
+                  className="flex-shrink-0 leading-relaxed w-full md:w-auto"
                   style={{ maxWidth: "300px", fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.65 }}
                 >
                   {service.description}
@@ -742,8 +689,7 @@ useEffect(() => {
             ))}
           </div>
 
-          {/* Stats bar */}
-          <div className="mt-14 flex items-center gap-12 border-t border-white/10 pt-10">
+          <div className="mt-14 flex flex-wrap items-center gap-8 md:gap-12 border-t border-white/10 pt-10">
             {[
               { n: "120+", l: "Projects" },
               { n: "6", l: "Years" },
@@ -765,17 +711,15 @@ useEffect(() => {
           </div>
         </section>
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 8. SECCIÓN ABOUT (página 4)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            8. SECCIÓN ABOUT
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="3"
-          className="relative h-screen flex items-stretch overflow-hidden"
+          className="relative h-screen flex flex-col md:flex-row items-stretch overflow-hidden"
           style={{ backgroundColor: "#111111", scrollSnapAlign: "start" }}
         >
-          {/* Image column */}
-          <div className="relative w-1/2 overflow-hidden bg-card">
+          <div className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden bg-card">
             <img
               src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&h=1080&fit=crop&auto=format"
               alt="Creative studio at work"
@@ -788,8 +732,7 @@ useEffect(() => {
             />
           </div>
 
-          {/* Text column */}
-          <div className="w-1/2 flex flex-col justify-center px-16 py-24">
+          <div className="w-full md:w-1/2 flex flex-col justify-center px-8 md:px-16 py-12 md:py-24">
             <span
               className="block mb-8 font-medium"
               style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#3DCFC4" }}
@@ -798,7 +741,7 @@ useEffect(() => {
             </span>
             <h2
               className="text-white font-black uppercase mb-8"
-              style={{ fontSize: "clamp(38px, 4.5vw, 68px)", lineHeight: 0.95, letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(30px, 4.5vw, 68px)", lineHeight: 0.95, letterSpacing: "-0.02em" }}
             >
               Studio for
               <br />
@@ -829,24 +772,21 @@ useEffect(() => {
           </div>
         </section>
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 9. SECCIÓN CONTACT (página 5)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            9. SECCIÓN CONTACT
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="4"
-          className="relative h-screen flex flex-col justify-between px-16 md:px-24 py-24 overflow-hidden"
+          className="relative h-screen flex flex-col justify-between px-8 md:px-16 lg:px-24 py-12 md:py-24 overflow-hidden"
           style={{ backgroundColor: "#3DCFC4", scrollSnapAlign: "start" }}
         >
-          {/* Ghost text */}
           <div
             className="absolute -bottom-4 -left-4 text-black/[0.06] font-black uppercase leading-none select-none pointer-events-none"
-            style={{ fontSize: "clamp(110px, 20vw, 280px)" }}
+            style={{ fontSize: "clamp(80px, 20vw, 280px)" }}
           >
             Hello.
           </div>
 
-          {/* Heading */}
           <div className="relative z-10">
             <span
               className="block mb-8 font-medium text-black/50"
@@ -856,7 +796,7 @@ useEffect(() => {
             </span>
             <h2
               className="text-white font-black uppercase"
-              style={{ fontSize: "clamp(52px, 9vw, 128px)", lineHeight: 0.91, letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(40px, 9vw, 128px)", lineHeight: 0.91, letterSpacing: "-0.02em" }}
             >
               Ready to
               <br />
@@ -868,8 +808,7 @@ useEffect(() => {
             </h2>
           </div>
 
-          {/* Footer row */}
-          <div className="relative z-10 flex items-end justify-between flex-wrap gap-8">
+          <div className="relative z-10 flex flex-wrap items-end justify-between gap-8">
             <div className="flex flex-col gap-3">
               <a
                 href="mailto:hello@phoenixstudio.co"
@@ -894,14 +833,14 @@ useEffect(() => {
               <span style={{ color: "#00E5D1", fontSize: "18px" }}>↘</span>
             </button>
 
-            <div className="flex flex-col items-end gap-3">
+            <div className="flex flex-col items-start md:items-end gap-3">
               <span
                 className="text-black/40 font-medium"
                 style={{ fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}
               >
                 Follow Us
               </span>
-              <div className="flex gap-5">
+              <div className="flex gap-5 flex-wrap">
                 {["Instagram", "Behance", "LinkedIn"].map((s) => (
                   <a
                     key={s}
@@ -916,7 +855,6 @@ useEffect(() => {
             </div>
           </div>
         </section>
-
       </div>
     </div>
   );
