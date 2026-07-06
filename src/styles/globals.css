@@ -1,14 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "./theme.css";
 
-@import './theme.css';
+/* Las variables de Shadcn ya están en theme.css */
+/* No necesitas @layer base con @apply */
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Si necesitas estilos base, usa selectores CSS normales */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }

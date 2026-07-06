@@ -1,5 +1,5 @@
 import { skills } from '@/data/skills'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/app/components/ui/badge'
 
 export function SkillsSection() {
   return (

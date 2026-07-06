@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { navigation } from '@/config/navigation'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/app/components/ui/button'
 import { siteConfig } from '@/config/site'
 
 export function Navbar() {
