@@ -418,14 +418,82 @@ export default function App() {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   return (
-    <div className="bg-background text-foreground" style={{ fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
-      
-      {/* ─── ESTILOS GLOBALES ──────────────────────────────── */}
-      <style>{`
-        * { cursor: none !important; }
-        ::-webkit-scrollbar { display: none; }
-        html, body { scrollbar-width: none; overflow: hidden; }
-      `}</style>
+  <div className="bg-background text-foreground" style={{ fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    
+    {/* ─── ESTILOS GLOBALES ──────────────────────────────── */}
+  <style>{`
+  * { cursor: none !important; }
+  ::-webkit-scrollbar { display: none; }
+  html, body { scrollbar-width: none; overflow: hidden; }
+  
+  @media (max-width: 768px) {
+    .mobile-hidden {
+      display: none !important;
+    }
+    
+    .hero-container {
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      border-radius: 0 !important;
+      /* top se mantiene: 20vh */
+      /* bottom se mantiene: 1vh */
+    }
+    
+    /* SOLO EXTENDER EL CANVAS */
+    .hero-container canvas {
+      height: 54% !important;
+      bottom: -4% !important;
+    }
+    
+    .hero-content {
+      left: 8% !important;
+      bottom: 30% !important;
+    }
+    
+    .hero-photo {
+      right: 2% !important;
+      width: min(280px, 40vw) !important;
+      height: min(420px, 65vh) !important;
+      bottom: 0 !important;
+    }
+    
+    .hero-title {
+      font-size: clamp(40px, 12vw, 80px) !important;
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(16px, 3vw, 30px) !important;
+      margin-bottom: clamp(10px, 3vh, 40px) !important;
+      margin-left: 5px !important;
+    }
+    
+    .logo-text {
+      font-size: 22px !important;
+      letter-spacing: 0.2em !important;
+    }
+    
+    .menu-button {
+      top: 20px !important;
+      right: 20px !important;
+      gap: 8px !important;
+      padding: 4px !important;
+    }
+    
+    .menu-line {
+      height: 2.5px !important;
+    }
+    
+    .menu-line:first-child,
+    .menu-line:last-child {
+      width: 32px !important;
+    }
+    
+    .menu-line:nth-child(2) {
+      width: 24px !important;
+    }
+  }
+`}</style>
 
       {/* ─── CURSOR PERSONALIZADO ──────────────────────────── */}
       <div
@@ -453,26 +521,26 @@ export default function App() {
 
       {/* ─── LOGO ────────────────────────────────────────── */}
       <div className="fixed top-7 left-8 z-50 mix-blend-difference select-none">
-        <span className="text-white font-bold text-sm" style={{ letterSpacing: "0.15em" }}>
+        <span className="text-white font-bold text-sm logo-text" style={{ letterSpacing: "0.15em" }}>
           LUFERO
         </span>
       </div>
 
       {/* ─── MENÚ HAMBURGUESA ────────────────────────────── */}
       <button
-        className="fixed top-6 right-8 z-50 mix-blend-difference flex flex-col gap-[5px] p-2 group"
+        className="fixed top-6 right-8 z-50 mix-blend-difference flex flex-col gap-[5px] p-2 group menu-button"
         onClick={() => setMenuOpen((v) => !v)}
         aria-label="Menu"
       >
         <span
-          className="block h-px bg-white transition-all duration-400"
+          className="block h-px bg-white transition-all duration-400 menu-line"
           style={{
             width: "28px",
             transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none",
           }}
         />
         <span
-          className="block h-px bg-white transition-all duration-200"
+          className="block h-px bg-white transition-all duration-200 menu-line"
           style={{
             width: "20px",
             opacity: menuOpen ? 0 : 1,
@@ -480,7 +548,7 @@ export default function App() {
           }}
         />
         <span
-          className="block h-px bg-white transition-all duration-400"
+          className="block h-px bg-white transition-all duration-400 menu-line"
           style={{
             width: "28px",
             transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none",
@@ -488,8 +556,8 @@ export default function App() {
         />
       </button>
 
-      {/* ─── NAVEGACIÓN DE PUNTITOS (más grandes) ────────── */}
-      <div className="fixed left-7 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+      {/* ─── NAVEGACIÓN DE PUNTITOS (oculto en móvil) ────────── */}
+      <div className="fixed left-7 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4 mobile-hidden">
         {SECTION_NAMES.map((_, idx) => (
           <button
             key={idx}
@@ -504,8 +572,8 @@ export default function App() {
         ))}
       </div>
 
-      {/* ─── TEXTO "SCROLL" (más grande) ──────────────────── */}
-      <div className="fixed bottom-8 left-8 z-50 mix-blend-difference">
+      {/* ─── TEXTO "SCROLL" (oculto en móvil) ──────────────────── */}
+      <div className="fixed bottom-8 left-8 z-50 mix-blend-difference mobile-hidden">
         <span
           className="text-white/70 font-medium"
           style={{
@@ -520,8 +588,8 @@ export default function App() {
         </span>
       </div>
 
-      {/* ─── TEXTO "PORTFOLIO" (más grande) ──────────────── */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 mix-blend-difference">
+      {/* ─── TEXTO "PORTFOLIO" (oculto en móvil) ──────────────── */}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 mix-blend-difference mobile-hidden">
         <span
           className="text-white/70 font-medium"
           style={{
@@ -535,9 +603,9 @@ export default function App() {
         </span>
       </div>
 
-      {/* ─── LÍNEA DECORATIVA DERECHA ────────────────────── */}
+      {/* ─── LÍNEA DECORATIVA DERECHA (oculto en móvil) ────── */}
       <div
-        className="fixed right-16 z-40 w-px"
+        className="fixed right-16 z-40 w-px mobile-hidden"
         style={{
           top: "22%",
           bottom: "22%",
@@ -591,6 +659,7 @@ export default function App() {
         className="h-screen overflow-y-scroll"
         style={{ scrollSnapType: "y mandatory" }}
       >
+        
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             5. SECCIÓN HERO (index 0) - CON ANIMACIONES AL SCROLL
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
@@ -606,12 +675,13 @@ export default function App() {
           }}
         >
           <div
+            className="hero-container"
             style={{
               position: "absolute",
               left: "14vw",
               right: "12vw",
               top: "20vh",
-              bottom: "1vh",
+              bottom: "0",
               backgroundColor: "#3DCFC4",
               overflow: "hidden",
               opacity: 1,
@@ -634,6 +704,7 @@ export default function App() {
             {/* Contenido textual (FullStack DV + Daniel Gomez) */}
             <div
               ref={heroContentRef}
+              className="hero-content"
               style={{
                 position: "absolute",
                 bottom: "30%",
@@ -645,6 +716,7 @@ export default function App() {
               }}
             >
               <span
+                className="hero-subtitle"
                 style={{
                   display: "block",
                   fontSize: "clamp(24px, 4vw, 50px)",
@@ -658,6 +730,7 @@ export default function App() {
                 FullStack DV
               </span>
               <h1
+                className="hero-title"
                 style={{
                   margin: 0,
                   fontSize: "clamp(60px, 15vw, 200px)",
@@ -676,6 +749,7 @@ export default function App() {
             {/* Foto */}
             <div
               ref={heroPhotoRef}
+              className="hero-photo"
               style={{
                 position: "absolute",
                 right: "10%",
