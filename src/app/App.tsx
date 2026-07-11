@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import fotoMia from '../assets/foto_mia.png';
+import * as THREE from "three";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 1. DATOS GLOBALES
@@ -27,11 +28,13 @@ interface TechSkill {
 
 const PROJECTS: Project[] = [
   {
+    
+    
     id: 1,
     title: "Noir Editorial",
     category: "Photography",
     year: "2024",
-    image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=900&h=700&fit=crop&auto=format",
+    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&h=700&fit=crop&auto=format",
   },
   {
     id: 2,
@@ -52,20 +55,21 @@ const PROJECTS: Project[] = [
     title: "Luminary Film",
     category: "Film & Motion",
     year: "2023",
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&h=700&fit=crop&auto=format",
+    image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=900&h=700&fit=crop&auto=format",
+  
   },
 ];
 
 const SERVICES: Service[] = [
   {
-    number: "01",
-    title: "Art Direction",
+    number: "",
+    title: "",
     description:
-      "Visual storytelling that commands attention and drives emotional resonance across every medium.",
+      "",
   },
   {
     number: "02",
-    title: "Brand Identity",
+    title: "",
     description:
       "Distinctive systems built from first principles — mark, palette, type, and voice unified into a singular presence.",
   },
@@ -445,19 +449,31 @@ export default function App() {
       height: 54% !important;
       bottom: -4% !important;
     }
+
+   /* aqui esta lo de daniel gomez y fusllstack dv, con botton va para arriba */ 
     
     .hero-content {
-      left: 8% !important;
-      bottom: 30% !important;
-    }
+  left: 8% !important;
+  bottom: 60% !important;
+}
     
     .hero-photo {
-      right: 2% !important;
-      width: min(280px, 40vw) !important;
-      height: min(420px, 65vh) !important;
-      bottom: 0 !important;
-    }
+  right: 0 !important;
+  width: min(340px, 58vw) !important;
+  height: min(560px, 84vh) !important;
+  bottom: 0 !important;
+}
     
+.hero-info-box {
+      right: 0 !important;
+      bottom: 0 !important;
+      width: min(210px, 52vw) !important;
+      padding: 16px !important;
+    }
+
+
+
+
     .hero-title {
       font-size: clamp(40px, 12vw, 80px) !important;
     }
@@ -519,42 +535,50 @@ export default function App() {
         </div>
       </div>
 
-      {/* ─── LOGO ────────────────────────────────────────── */}
-      <div className="fixed top-7 left-8 z-50 mix-blend-difference select-none">
-        <span className="text-white font-bold text-sm logo-text" style={{ letterSpacing: "0.15em" }}>
-          LUFERO
-        </span>
-      </div>
+  {/* ─── LOGO ────────────────────────────────────────── */}
+<div className="fixed top-7 left-8 z-50 select-none">
+  <span 
+    className="font-bold text-sm logo-text" 
+    style={{ 
+      letterSpacing: "0.15em",
+      fontFamily: "'Manrope', sans-serif", // <--- Fuente Manrope
+      fontSize: "clamp(16px, 2vw, 24px)",
+      color: "#FFFFFF"
+    }}
+  >
+    LUFERO
+  </span>
+</div>
 
       {/* ─── MENÚ HAMBURGUESA ────────────────────────────── */}
-      <button
-        className="fixed top-6 right-8 z-50 mix-blend-difference flex flex-col gap-[5px] p-2 group menu-button"
-        onClick={() => setMenuOpen((v) => !v)}
-        aria-label="Menu"
-      >
-        <span
-          className="block h-px bg-white transition-all duration-400 menu-line"
-          style={{
-            width: "28px",
-            transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none",
-          }}
-        />
-        <span
-          className="block h-px bg-white transition-all duration-200 menu-line"
-          style={{
-            width: "20px",
-            opacity: menuOpen ? 0 : 1,
-            transform: menuOpen ? "scaleX(0)" : "none",
-          }}
-        />
-        <span
-          className="block h-px bg-white transition-all duration-400 menu-line"
-          style={{
-            width: "28px",
-            transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none",
-          }}
-        />
-      </button>
+<button
+  className="fixed top-6 right-8 z-50 flex flex-col gap-[5px] p-2 group menu-button"
+  onClick={() => setMenuOpen((v) => !v)}
+  aria-label="Menu"
+>
+  <span
+    className="block h-px bg-white transition-all duration-400 menu-line"
+    style={{
+      width: "28px",
+      transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none",
+    }}
+  />
+  <span
+    className="block h-px bg-white transition-all duration-200 menu-line"
+    style={{
+      width: "20px",
+      opacity: menuOpen ? 0 : 1,
+      transform: menuOpen ? "scaleX(0)" : "none",
+    }}
+  />
+  <span
+    className="block h-px bg-white transition-all duration-400 menu-line"
+    style={{
+      width: "28px",
+      transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none",
+    }}
+  />
+</button>
 
       {/* ─── NAVEGACIÓN DE PUNTITOS (oculto en móvil) ────────── */}
       <div className="fixed left-7 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4 mobile-hidden">
@@ -745,8 +769,7 @@ export default function App() {
                 Gomez
               </h1>
             </div>
-
-            {/* Foto */}
+  {/* Foto */}
             <div
               ref={heroPhotoRef}
               className="hero-photo"
@@ -777,166 +800,202 @@ export default function App() {
                 }}
               />
             </div>
+
+             {/* Cuadro negro de descripción estilo Phoenix */}
+            <div
+              className="hero-info-box"
+              style={{
+                position: "absolute",
+                right: "0",
+                bottom: "0",
+                zIndex: 20,
+                backgroundColor: "#0A0A0A",
+                padding: "32px 40px",
+                width: "min(480px, 32vw)",
+                maxWidth: "none",
+              }}
+            >
+              <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "14px", lineHeight: 1.5, margin: "0 0 12px 0" }}>
+                Desarrollador FullStack creando experiencias digitales con atención al detalle.
+              </p>
+              <a
+                href="#contact"
+                className="text-white font-medium"
+                style={{ fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase", borderBottom: "1px solid rgba(255,255,255,0.4)", paddingBottom: "4px" }}
+              >
+                Contáctame
+              </a>
+            </div>
           </div>
         </section>
 
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             SECCIÓN ABOUT ME (index 1)
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section
-          data-section-index="1"
-          className="relative min-h-screen flex items-center overflow-hidden"
-          style={{ 
-            backgroundColor: "#0A0A0A", 
-            scrollSnapAlign: "start",
-            padding: "80px 0"
-          }}
+<section
+  data-section-index="1"
+  className="relative flex items-center"
+  style={{ 
+    backgroundColor: "#0A0A0A", 
+    scrollSnapAlign: "start",
+    height: "100vh",
+    padding: "10px 0",
+    overflow: "hidden" // Evita scroll interno
+  }}
+>
+  {/* Fondo decorativo - más sutil en móvil */}
+  <div className="absolute inset-0 opacity-3 md:opacity-5 pointer-events-none">
+    <div className="absolute top-10 right-10 w-40 h-40 md:w-96 md:h-96 bg-[#3DCFC4] rounded-full blur-2xl md:blur-3xl" />
+    <div className="absolute bottom-10 left-10 w-32 h-32 md:w-80 md:h-80 bg-blue-500 rounded-full blur-2xl md:blur-3xl" />
+  </div>
+
+  <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-12">
+    {/* Título - más compacto */}
+    <div className="mb-3 md:mb-8">
+      <span
+        className="font-medium text-[10px] md:text-sm"
+        style={{ 
+          letterSpacing: "0.12em", 
+          textTransform: "uppercase", 
+          color: "#3DCFC4" 
+        }}
+      >
+        Sobre Mí
+      </span>
+      <h2
+        className="text-white font-bold mt-1 md:mt-3"
+        style={{ 
+          fontSize: "clamp(20px, 3.5vw, 64px)", 
+          lineHeight: 1.1,
+          letterSpacing: "-0.02em"
+        }}
+      >
+        FullStack DV
+        <br />
+        <span style={{ color: "#3DCFC4", fontSize: "clamp(18px, 3vw, 50px)" }}>
+          Creativo & Versátil
+        </span>
+      </h2>
+    </div>
+
+    {/* Grid - una columna en móvil */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-8 items-start">
+      {/* Columna izquierda - texto */}
+      <div>
+        <p
+          className="text-white/70 leading-snug mb-2 md:mb-4"
+          style={{ fontSize: "clamp(11px, 1.1vw, 18px)", lineHeight: 1.4 }}
         >
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 right-20 w-96 h-96 bg-[#3DCFC4] rounded-full blur-3xl" />
-            <div className="absolute bottom-20 left-20 w-80 h-80 bg-blue-500 rounded-full blur-3xl" />
-          </div>
-
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
-            <div className="mb-16">
-              <span
-                className="font-medium"
-                style={{ 
-                  fontSize: "13px", 
-                  letterSpacing: "0.12em", 
-                  textTransform: "uppercase", 
-                  color: "#3DCFC4" 
-                }}
-              >
-                Sobre Mí
+          Soy <span className="text-white font-semibold">Daniel Gomez</span>, 
+          desarrollador fullstack con <span className="text-[#3DCFC4]">6+ años</span> 
+          creando experiencias digitales únicas.
+        </p>
+        <p
+          className="text-white/50 leading-snug mb-3 md:mb-6"
+          style={{ fontSize: "clamp(10px, 0.9vw, 16px)", lineHeight: 1.4 }}
+        >
+          Especializado en JavaScript/TypeScript, aplicaciones escalables 
+          e interfaces intuitivas.
+        </p>
+        
+        {/* Stats - más compactos */}
+        <div className="grid grid-cols-3 gap-1.5 md:gap-3">
+          {[
+            { n: "6+", l: "Años" },
+            { n: "50+", l: "Proyectos" },
+            { n: "30+", l: "Clientes" },
+          ].map((stat) => (
+            <div key={stat.l} className="bg-white/5 rounded-lg p-1.5 md:p-3 text-center border border-white/5">
+              <span className="block text-[#3DCFC4] font-bold text-sm md:text-2xl">
+                {stat.n}
               </span>
-              <h2
-                className="text-white font-bold mt-3"
-                style={{ 
-                  fontSize: "clamp(36px, 5vw, 64px)", 
-                  lineHeight: 1.05,
-                  letterSpacing: "-0.02em"
-                }}
-              >
-                FullStack Developer
-                <br />
-                <span style={{ color: "#3DCFC4" }}>Creativo & Versátil</span>
-              </h2>
+              <span className="text-white/40 text-[8px] md:text-xs uppercase tracking-wider">
+                {stat.l}
+              </span>
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-              <div>
-                <p
-                  className="text-white/70 leading-relaxed mb-6"
-                  style={{ fontSize: "18px", lineHeight: 1.8 }}
-                >
-                  Soy <span className="text-white font-semibold">Daniel Gomez</span>, 
-                  un desarrollador fullstack apasionado por crear experiencias digitales 
-                  únicas y funcionales. Con más de 6 años de experiencia, 
-                  combino la <span className="text-[#3DCFC4]">precisión técnica</span> 
-                  con un enfoque <span className="text-[#3DCFC4]">creativo</span> 
-                  para construir soluciones que realmente conectan con los usuarios.
-                </p>
-                <p
-                  className="text-white/50 leading-relaxed mb-8"
-                  style={{ fontSize: "16px", lineHeight: 1.8 }}
-                >
-                  Especializado en el ecosistema JavaScript/TypeScript, 
-                  desarrollo de aplicaciones escalables y diseño de interfaces 
-                  intuitivas. Siempre explorando nuevas tecnologías y 
-                  metodologías para mantenerse a la vanguardia.
-                </p>
-                <div className="grid grid-cols-3 gap-4">
-                  {[
-                    { n: "6+", l: "Años de experiencia" },
-                    { n: "50+", l: "Proyectos completados" },
-                    { n: "30+", l: "Clientes satisfechos" },
-                  ].map((stat) => (
-                    <div key={stat.l} className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
-                      <span className="block text-[#3DCFC4] font-bold text-2xl">
-                        {stat.n}
-                      </span>
-                      <span className="text-white/40 text-xs uppercase tracking-wider">
-                        {stat.l}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3
-                  className="text-white font-semibold mb-6"
-                  style={{ fontSize: "18px", letterSpacing: "0.1em", textTransform: "uppercase" }}
-                >
-                  <span className="text-[#3DCFC4]">//</span> Tecnologías que domino
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {TECH_SKILLS.map((skill) => (
-                    <div
-                      key={skill.name}
-                      className="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#3DCFC4]/10 border border-white/5 hover:border-[#3DCFC4]/30"
-                    >
-                      <div className="flex flex-col items-center text-center">
-                        <img 
-                          src={skill.icon} 
-                          alt={skill.name}
-                          className="w-10 h-10 mb-2 opacity-80 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110"
-                          style={{ filter: "brightness(0) invert(1)" }}
-                        />
-                        <span className="text-white/80 text-xs font-medium mb-1">
-                          {skill.name}
-                        </span>
-                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                          <div
-                            className="h-full rounded-full transition-all duration-1000"
-                            style={{
-                              width: `${skill.level}%`,
-                              backgroundColor: "#3DCFC4",
-                              opacity: 0.6,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-16 pt-12 border-t border-white/10 flex flex-wrap items-center justify-between gap-6">
-              <div className="flex items-center gap-6">
-                <span className="text-white/30 text-sm uppercase tracking-wider">
-                  Disponible para
+      {/* Columna derecha - tecnologías */}
+      <div>
+        <h3
+          className="text-white font-semibold mb-1.5 md:mb-4"
+          style={{ fontSize: "clamp(9px, 0.8vw, 18px)", letterSpacing: "0.1em", textTransform: "uppercase" }}
+        >
+          <span className="text-[#3DCFC4]">//</span> Tecnologías
+        </h3>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-1.5 md:gap-3">
+          {TECH_SKILLS.slice(0, 6).map((skill) => ( // Solo 6 en móvil
+            <div
+              key={skill.name}
+              className="group bg-white/5 hover:bg-white/10 rounded-lg p-1.5 md:p-3 transition-all duration-300 hover:scale-105 border border-white/5"
+            >
+              <div className="flex flex-col items-center text-center">
+                <img 
+                  src={skill.icon} 
+                  alt={skill.name}
+                  className="w-5 h-5 md:w-8 md:h-8 mb-0.5 md:mb-1.5 opacity-70 group-hover:opacity-100 transition-all duration-300"
+                  style={{ filter: "brightness(0) invert(1)" }}
+                />
+                <span className="text-white/70 text-[7px] md:text-xs font-medium leading-tight">
+                  {skill.name}
                 </span>
-                <span className="text-[#3DCFC4] font-semibold text-lg">
-                  Freelance & Full-time
-                </span>
-                <div className="flex gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-green-500 text-xs">Disponible</span>
+                <div className="w-full h-0.5 bg-white/10 rounded-full overflow-hidden mt-0.5">
+                  <div
+                    className="h-full rounded-full transition-all duration-1000"
+                    style={{
+                      width: `${skill.level}%`,
+                      backgroundColor: "#3DCFC4",
+                      opacity: 0.5,
+                    }}
+                  />
                 </div>
               </div>
-              <div className="flex gap-6">
-                {[
-                  { name: "GitHub", url: "https://github.com" },
-                  { name: "LinkedIn", url: "https://linkedin.com" },
-                  { name: "Twitter", url: "https://twitter.com" }
-                ].map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/40 hover:text-[#3DCFC4] transition-colors duration-200 text-sm uppercase tracking-wider hover:scale-105 transform"
-                  >
-                    {social.name}
-                  </a>
-                ))}
-              </div>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Footer - más compacto */}
+    <div className="mt-2 md:mt-8 pt-2 md:pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-1.5 md:gap-4">
+      <div className="flex flex-wrap items-center gap-1.5 md:gap-4">
+        <span className="text-white/30 text-[8px] md:text-sm uppercase tracking-wider">
+          Disponible
+        </span>
+        <span className="text-[#3DCFC4] font-semibold text-[10px] md:text-lg">
+          Freelance
+        </span>
+        <div className="flex items-center gap-1">
+          <span className="w-1 h-1 md:w-2 md:h-2 bg-green-500 rounded-full animate-pulse" />
+          <span className="text-green-500 text-[7px] md:text-xs">Activo</span>
+        </div>
+      </div>
+      <div className="flex gap-2 md:gap-4">
+        {[
+          { name: "GitHub", url: "https://github.com" },
+          { name: "LinkedIn", url: "https://linkedin.com" },
+        ].map((social) => (
+          <a
+            key={social.name}
+            href={social.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/40 hover:text-[#3DCFC4] transition-colors duration-200 text-[8px] md:text-sm uppercase tracking-wider hover:scale-105 transform"
+          >
+            {social.name}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
 
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             SECCIÓN WORK (index 2)
@@ -950,13 +1009,13 @@ export default function App() {
             className="absolute top-7 left-16 z-10 font-medium"
             style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#3DCFC4" }}
           >
-            Selected Work
+           
           </div>
           <div
             className="absolute top-7 right-20 z-10 text-white/25 font-medium"
             style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase" }}
           >
-            2023 – 2024
+          
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 h-full">
@@ -1023,7 +1082,7 @@ export default function App() {
               className="font-medium"
               style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#3DCFC4" }}
             >
-              What We Do
+            
             </span>
           </div>
 
