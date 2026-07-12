@@ -223,33 +223,48 @@ export default function App() {
   }, []);
 
   // ─── Efecto Parallax en la foto ────────────────────────────
-  useEffect(() => {
-    let raf: number;
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-    
-    const photoTarget = { x: 0, y: 0 };
-    const photoCurrent = { x: 0, y: 0 };
 
-    const tick = () => {
-      const nx = mouseMxRef.current;
-      const ny = mouseMyRef.current;
-      
-      photoTarget.x = (0.5 - nx) * 30;
-      photoTarget.y = (0.5 - ny) * 30;
-      
-      photoCurrent.x = lerp(photoCurrent.x, photoTarget.x, 0.08);
-      photoCurrent.y = lerp(photoCurrent.y, photoTarget.y, 0.08);
-      
-      if (photoWrapRef.current) {
-        photoWrapRef.current.style.transform = `translate(${photoCurrent.x}px, ${photoCurrent.y}px)`;
-      }
-      
-      raf = requestAnimationFrame(tick);
-    };
+
+
+useEffect(() => {
+  let raf: number;
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  
+  const photoTarget = { x: 0, y: 0 };
+  const photoCurrent = { x: 0, y: 0 };
+
+  const tick = () => {
+    const nx = mouseMxRef.current;
+    const ny = mouseMyRef.current;
+    
+    photoTarget.x = (0.5 - nx) * 30;
+    photoTarget.y = (0.5 - ny) * 30;
+    
+    photoCurrent.x = lerp(photoCurrent.x, photoTarget.x, 0.08);
+    photoCurrent.y = lerp(photoCurrent.y, photoTarget.y, 0.08);
+    
+    if (photoWrapRef.current) {
+      photoWrapRef.current.style.transform = `translate(${photoCurrent.x}px, ${photoCurrent.y}px)`;
+    }
     
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+  };
+  
+  // 🔥 CONDICIÓN: SOLO EJECUTAR EN DESKTOP
+  const isMobile = window.innerWidth <= 768;
+  if (!isMobile) {
+    raf = requestAnimationFrame(tick);
+  }
+  
+  return () => {
+    if (raf) cancelAnimationFrame(raf);
+  };
+}, []);
+  
+
+
+
+
 
   // ─── Efecto: Seguimiento del mouse ────────────────────────
   useEffect(() => {
@@ -425,96 +440,119 @@ export default function App() {
   <div className="bg-background text-foreground" style={{ fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
     
     {/* ─── ESTILOS GLOBALES ──────────────────────────────── */}
-  <style>{`
+  
+<style>{`
   * { cursor: none !important; }
   ::-webkit-scrollbar { display: none; }
   html, body { scrollbar-width: none; overflow: hidden; }
   
   @media (max-width: 768px) {
-    .mobile-hidden {
-      display: none !important;
-    }
-    
-    .hero-container {
-      left: 0 !important;
-      right: 0 !important;
-      width: 100% !important;
-      border-radius: 0 !important;
-      /* top se mantiene: 20vh */
-      /* bottom se mantiene: 1vh */
-    }
-    
-    /* SOLO EXTENDER EL CANVAS */
-    .hero-container canvas {
-      height: 54% !important;
-      bottom: -4% !important;
-    }
-
-   /* aqui esta lo de daniel gomez y fusllstack dv, con botton va para arriba */ 
-    
-    .hero-content {
-  left: 8% !important;
-  bottom: 60% !important;
-}
-    
-    .hero-photo {
-      right: -8% !important;
-      width: min(400px, 78vw) !important;
-      height: min(560px, 96vh) !important;
-      bottom: 0 !important;
-    }
-    
-
-
-
-
-
-.hero-info-box {
-      right: 0 !important;
-      bottom: 0 !important;
-      width: min(210px, 52vw) !important;
-      padding: 16px !important;
-    }
-
-
-
-
-    .hero-title {
-      font-size: clamp(40px, 12vw, 80px) !important;
-    }
-    
-    .hero-subtitle {
-      font-size: clamp(16px, 3vw, 30px) !important;
-      margin-bottom: clamp(10px, 3vh, 40px) !important;
-      margin-left: 5px !important;
-    }
-    
-    .logo-text {
-      font-size: 22px !important;
-      letter-spacing: 0.2em !important;
-    }
-    
-    .menu-button {
-      top: 20px !important;
-      right: 20px !important;
-      gap: 8px !important;
-      padding: 4px !important;
-    }
-    
-    .menu-line {
-      height: 2.5px !important;
-    }
-    
-    .menu-line:first-child,
-    .menu-line:last-child {
-      width: 32px !important;
-    }
-    
-    .menu-line:nth-child(2) {
-      width: 24px !important;
-    }
+  .mobile-hidden {
+    display: none !important;
   }
+  
+  .fixed.top-0.left-0.z-\\[9999\\] {
+    display: none !important;
+  }
+  
+  * {
+    cursor: auto !important;
+  }
+  
+  .hero-container {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+  }
+  
+  .hero-container canvas {
+    height: 54% !important;
+    bottom: -4% !important;
+  }
+  
+  .hero-content {
+    left: 8% !important;
+    bottom: 60% !important;
+  }
+  
+  .hero-photo {
+    right: -12% !important;
+    width: min(440px, 85vw) !important;
+    height: min(560px, 96vh) !important;
+    bottom: -15px !important;
+  }
+  
+  /* 🔥 ESTA ES LA CLAVE - REPOSICIONAR LA IMAGEN */
+  .hero-photo div {
+    background-position: 55% center !important;
+  }
+  
+  .hero-info-box {
+    right: 0 !important;
+    bottom: 0 !important;
+    width: min(210px, 52vw) !important;
+    padding: 16px !important;
+  }
+  
+  .hero-title {
+    font-size: clamp(40px, 12vw, 80px) !important;
+  }
+  
+  .hero-subtitle {
+    font-size: clamp(16px, 3vw, 30px) !important;
+    margin-bottom: clamp(10px, 3vh, 40px) !important;
+    margin-left: 5px !important;
+  }
+  
+  .logo-text {
+    font-size: 22px !important;
+    letter-spacing: 0.2em !important;
+  }
+  
+  .menu-button {
+    top: 20px !important;
+    right: 20px !important;
+    gap: 8px !important;
+    padding: 4px !important;
+  }
+  
+  .menu-line {
+    height: 2.5px !important;
+  }
+  
+  .menu-line:first-child,
+  .menu-line:last-child {
+    width: 32px !important;
+  }
+  
+  .menu-line:nth-child(2) {
+    width: 24px !important;
+  }
+}
 `}</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       {/* ─── CURSOR PERSONALIZADO ──────────────────────────── */}
       <div
@@ -777,7 +815,7 @@ export default function App() {
         color: "#FFFFFF",
         lineHeight: 0.85,
         letterSpacing: "-0.0em",
-        fontFamily: "'Charm'",
+        fontFamily: "'Charm´",
       }}
     >
       Daniel
