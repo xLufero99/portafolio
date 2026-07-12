@@ -70,6 +70,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.1.12",
+    "@types/node": "^26.1.1",
     "@types/three": "^0.185.1",
     "@vitejs/plugin-react": "4.7.0",
     "gh-pages": "^6.0.0",
