@@ -75,8 +75,8 @@ Error generating stack: `+i.message+`
   .hero-photo {
     right: -12% !important;
     width: min(440px, 85vw) !important;
-    height: min(560px, 96vh) !important;
-    bottom: -15px !important;
+    height: min(500px, 96vh) !important;
+    bottom: -9px !important;
   }
   
   /* 🔥 ESTA ES LA CLAVE - REPOSICIONAR LA IMAGEN */

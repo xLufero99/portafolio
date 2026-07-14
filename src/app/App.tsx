@@ -60,6 +60,16 @@ const PROJECTS: Project[] = [
   },
 ];
 
+const MIS_TECNOLOGIAS = [
+  { name: "Spring Boot", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg", level: 80 },
+  { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", level: 55 },
+  { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg", level: 70 },
+  { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", level: 75 },
+  { name: "Azure", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg", level: 70 },
+  { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", level: 75 },
+];
+
+
 const SERVICES: Service[] = [
   {
     number: "",
@@ -173,7 +183,7 @@ const TECH_SKILLS: TechSkill[] = [
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SECTION_NAMES actualizado (Home, About, Work, Services, Contact)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const SECTION_NAMES = ["Home", "About", "Work", "Services", "Contact"];
+const SECTION_NAMES = ["Portada", "Perfil", "Proyectos", "Servicios", "Contacto"];
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 2. COMPONENTE PRINCIPAL
@@ -706,7 +716,7 @@ useEffect(() => {
           ))}
         </nav>
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-8">
-          {["Instagram", "Behance", "LinkedIn"].map((s) => (
+          {["Behance", "LinkedIn"].map((s) => (
             <a
               key={s}
               href="#"
@@ -942,23 +952,31 @@ useEffect(() => {
           style={{ fontSize: "clamp(11px, 1.1vw, 18px)", lineHeight: 1.4 }}
         >
           Soy <span className="text-white font-semibold">Daniel Gomez</span>, 
-          desarrollador fullstack con <span className="text-[#3DCFC4]">6+ años</span> 
-          creando experiencias digitales únicas.
+          Estudiante de Ingeniería de Sistemas de 10mo semestre con enfoque backend especialmente en Java/Spring Boot, arquitectura y despliegue en la nube,
+          Manejo el ecosistema frontend (HTML/CSS/JS) y estoy potenciando mis proyectos con React, 
+          Busco oportunidades para consolidarme como desarrollador full-stack.
         </p>
-        <p
-          className="text-white/50 leading-snug mb-3 md:mb-6"
-          style={{ fontSize: "clamp(10px, 0.9vw, 16px)", lineHeight: 1.4 }}
-        >
-          Especializado en JavaScript/TypeScript, aplicaciones escalables 
-          e interfaces intuitivas.
-        </p>
-        
+
+
+
+
+    {/* <p
+  className="text-white/50 leading-snug mb-3 md:mb-6"
+  style={{ fontSize: "clamp(10px, 0.9vw, 16px)", lineHeight: 1.4 }}
+>
+  Especializado en JavaScript/TypeScript, aplicaciones escalables 
+  e interfaces intuitivas.
+</p> */}
+
+
+
+
         {/* Stats - más compactos */}
         <div className="grid grid-cols-3 gap-1.5 md:gap-3">
           {[
-            { n: "6+", l: "Años" },
-            { n: "50+", l: "Proyectos" },
-            { n: "30+", l: "Clientes" },
+            { n: "1+", l: "Años" },
+            { n: "7+", l: "Proyectos" },
+            { n: "5+", l: "Clientes" },
           ].map((stat) => (
             <div key={stat.l} className="bg-white/5 rounded-lg p-1.5 md:p-3 text-center border border-white/5">
               <span className="block text-[#3DCFC4] font-bold text-sm md:text-2xl">
@@ -971,47 +989,50 @@ useEffect(() => {
           ))}
         </div>
       </div>
+ </div>
 
-      {/* Columna derecha - tecnologías */}
-      <div>
-        <h3
-          className="text-white font-semibold mb-1.5 md:mb-4"
-          style={{ fontSize: "clamp(9px, 0.8vw, 18px)", letterSpacing: "0.1em", textTransform: "uppercase" }}
-        >
-          <span className="text-[#3DCFC4]">//</span> Tecnologías
-        </h3>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-1.5 md:gap-3">
-          {TECH_SKILLS.slice(0, 6).map((skill) => ( // Solo 6 en móvil
+
+
+{/* Columna derecha - tecnologías */}
+<div>
+  <h3
+    className="text-white font-semibold mb-1.5 md:mb-4"
+    style={{ fontSize: "clamp(9px, 0.8vw, 18px)", letterSpacing: "0.1em", textTransform: "uppercase" }}
+  >
+    <br />
+    <span className="text-[#3DCFC4]"></span> Tecnologías
+  </h3>
+  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-1.5 md:gap-3">
+    {MIS_TECNOLOGIAS.slice(0, 6).map((skill) => (
+      <div
+        key={skill.name}
+        className="group bg-white/5 hover:bg-white/10 rounded-lg p-1.5 md:p-3 transition-all duration-300 hover:scale-105 border border-white/5"
+      >
+        <div className="flex flex-col items-center text-center">
+          <img 
+            src={skill.icon} 
+            alt={skill.name}
+            className="w-5 h-5 md:w-8 md:h-8 mb-0.5 md:mb-1.5 opacity-70 group-hover:opacity-100 transition-all duration-300"
+            style={{ filter: "brightness(0) invert(1)" }}
+          />
+          <span className="text-white/70 text-[7px] md:text-xs font-medium leading-tight">
+            {skill.name}
+          </span>
+          <div className="w-full h-0.5 bg-white/10 rounded-full overflow-hidden mt-0.5">
             <div
-              key={skill.name}
-              className="group bg-white/5 hover:bg-white/10 rounded-lg p-1.5 md:p-3 transition-all duration-300 hover:scale-105 border border-white/5"
-            >
-              <div className="flex flex-col items-center text-center">
-                <img 
-                  src={skill.icon} 
-                  alt={skill.name}
-                  className="w-5 h-5 md:w-8 md:h-8 mb-0.5 md:mb-1.5 opacity-70 group-hover:opacity-100 transition-all duration-300"
-                  style={{ filter: "brightness(0) invert(1)" }}
-                />
-                <span className="text-white/70 text-[7px] md:text-xs font-medium leading-tight">
-                  {skill.name}
-                </span>
-                <div className="w-full h-0.5 bg-white/10 rounded-full overflow-hidden mt-0.5">
-                  <div
-                    className="h-full rounded-full transition-all duration-1000"
-                    style={{
-                      width: `${skill.level}%`,
-                      backgroundColor: "#3DCFC4",
-                      opacity: 0.5,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
+              className="h-full rounded-full transition-all duration-1000"
+              style={{
+                width: `${skill.level}%`,
+                backgroundColor: "#3DCFC4",
+                opacity: 0.5,
+              }}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    ))}
+  </div>
+</div>
 
     {/* Footer - más compacto */}
     <div className="mt-2 md:mt-8 pt-2 md:pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-1.5 md:gap-4">
@@ -1029,8 +1050,8 @@ useEffect(() => {
       </div>
       <div className="flex gap-2 md:gap-4">
         {[
-          { name: "GitHub", url: "https://github.com" },
-          { name: "LinkedIn", url: "https://linkedin.com" },
+          { name: "GitHub", url: "https://github.com/xLufero99" },
+          { name: "LinkedIn", url: "https://www.linkedin.com/in/daniel-felipe-gomez-miranda-29348625a/" },
         ].map((social) => (
           <a
             key={social.name}
