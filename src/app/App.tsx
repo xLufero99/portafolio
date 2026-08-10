@@ -852,7 +852,9 @@ useEffect(() => {
       Desarrollador FullStack creando experiencias digitales con atención al detalle.
     </p>
     <a
-      href="#contact"
+      href="https://linktr.ee/xLufero99"
+      target="_blank"
+      rel="noopener noreferrer"
       className="text-white font-medium"
       style={{ fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase", borderBottom: "1px solid rgba(255,255,255,0.4)", paddingBottom: "4px" }}
     >
@@ -1288,12 +1290,17 @@ useEffect(() => {
               </a>
             </div>
 
-            <button className="flex items-center gap-4 border-2 border-black/70 px-8 py-4 text-black font-semibold transition-all duration-300 hover:bg-black hover:text-primary hover:border-black">
+            <a
+              href="https://linktr.ee/xLufero99"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 border-2 border-black/70 px-8 py-4 text-black font-semibold transition-all duration-300 hover:bg-black hover:text-primary hover:border-black"
+            >
               <span style={{ fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" }}>
                 Start a Project
               </span>
               <span style={{ color: "#00E5D1", fontSize: "18px" }}>↘</span>
-            </button>
+            </a>
 
             <div className="flex flex-col items-start md:items-end gap-3">
               <span
