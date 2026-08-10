@@ -455,7 +455,23 @@ useEffect(() => {
   * { cursor: none !important; }
   ::-webkit-scrollbar { display: none; }
   html, body { scrollbar-width: none; overflow: hidden; }
-  
+
+  .hero-section,
+  .hero-photo-clip {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .hero-photo {
+    height: min(820px, 96vh);
+    height: min(820px, 96dvh);
+  }
+
+  .h-viewport {
+    height: 100vh;
+    height: 100dvh;
+  }
+
   @media (max-width: 768px) {
   .mobile-hidden {
     display: none !important;
@@ -490,6 +506,7 @@ useEffect(() => {
     right: -12% !important;
     width: min(440px, 85vw) !important;
     height: min(500px, 96vh) !important;
+    height: min(500px, 96dvh) !important;
     bottom: -9px !important;
   }
   
@@ -733,7 +750,7 @@ useEffect(() => {
           4. CONTENEDOR SCROLL
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <div
-        className="h-screen overflow-y-scroll"
+        className="h-screen overflow-y-scroll h-viewport"
         style={{ scrollSnapType: "y mandatory" }}
       >
         
@@ -743,8 +760,8 @@ useEffect(() => {
         <section
           ref={heroRef}
           data-section-index="0"
+          className="hero-section"
           style={{
-            height: "100vh",
             position: "relative",
             backgroundColor: "#0A0A0A",
             overflow: "visible",
@@ -871,7 +888,6 @@ useEffect(() => {
       top: 0,
       left: 0,
       right: 0,
-      height: "100vh",
       overflow: "hidden",
       zIndex: 1,
       pointerEvents: "none",
@@ -885,7 +901,6 @@ useEffect(() => {
         right: "12vw",
         bottom: 0,
         width: "min(782px, 62vw)",
-        height: "min(820px, 96vh)",
         zIndex: 1,
         overflow: "visible",
         pointerEvents: "none",
@@ -915,11 +930,10 @@ useEffect(() => {
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
 <section
   data-section-index="1"
-  className="relative flex items-center"
+  className="relative flex items-center h-viewport"
   style={{ 
     backgroundColor: "#0A0A0A", 
     scrollSnapAlign: "start",
-    height: "100vh",
     padding: "10px 0",
     overflow: "hidden" // Evita scroll interno
   }}
@@ -1094,7 +1108,7 @@ useEffect(() => {
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="2"
-          className="relative h-screen overflow-hidden"
+          className="relative h-screen overflow-hidden h-viewport"
           style={{ backgroundColor: "#0A0A0A", scrollSnapAlign: "start" }}
         >
           <div
@@ -1166,7 +1180,7 @@ useEffect(() => {
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="3"
-          className="relative h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24"
+          className="relative h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 h-viewport"
           style={{ backgroundColor: "#0A0A0A", scrollSnapAlign: "start" }}
         >
           <div className="mb-14">
@@ -1241,7 +1255,7 @@ useEffect(() => {
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <section
           data-section-index="4"
-          className="relative h-screen flex flex-col justify-between px-8 md:px-16 lg:px-24 py-12 md:py-24 overflow-hidden"
+          className="relative h-screen flex flex-col justify-between px-8 md:px-16 lg:px-24 py-12 md:py-24 overflow-hidden h-viewport"
           style={{ backgroundColor: "#3DCFC4", scrollSnapAlign: "start" }}
         >
           <div
