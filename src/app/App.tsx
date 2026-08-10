@@ -834,38 +834,6 @@ useEffect(() => {
     </h1>
   </div>
 
-  {/* Foto */}
-  <div
-    ref={heroPhotoRef}
-    className="hero-photo"
-    style={{
-      position: "absolute",
-      right: "0%",
-      bottom: "0",
-      width: "min(782px, 62vw)",
-      height: "min(820px, 96vh)",
-      zIndex: 1,
-      overflow: "visible",
-      pointerEvents: "none",
-      opacity: 1,
-      transform: "translateY(0)",
-      transition: "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s",
-      willChange: "transform",
-    }}
-  >
-    <div
-      ref={photoWrapRef}
-      style={{
-        width: "100%",
-        height: "100%",
-        backgroundImage: `url(${fotoMia})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center 50%",
-        backgroundRepeat: "no-repeat",
-      }}
-    />
-  </div>
-
   {/* Cuadro negro de descripción estilo Phoenix */}
   <div
     className="hero-info-box"
@@ -892,6 +860,52 @@ useEffect(() => {
     </a>
   </div>
 </div>
+
+  {/* Foto */}
+  <div
+    className="hero-photo-clip"
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: "100vh",
+      overflow: "hidden",
+      zIndex: 1,
+      pointerEvents: "none",
+    }}
+  >
+    <div
+      ref={heroPhotoRef}
+      className="hero-photo"
+      style={{
+        position: "absolute",
+        right: "12vw",
+        bottom: 0,
+        width: "min(782px, 62vw)",
+        height: "min(820px, 96vh)",
+        zIndex: 1,
+        overflow: "visible",
+        pointerEvents: "none",
+        opacity: 1,
+        transform: "translateY(0)",
+        transition: "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s",
+        willChange: "transform",
+      }}
+    >
+      <div
+        ref={photoWrapRef}
+        style={{
+          width: "100%",
+          height: "100%",
+          backgroundImage: `url(${fotoMia})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 50%",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+    </div>
+  </div>
         </section>
 
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
