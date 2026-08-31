@@ -55,8 +55,7 @@ export default function App() {
       />
 
       <div
-        className="h-screen overflow-y-scroll h-viewport"
-        style={{ scrollSnapType: "y mandatory" }}
+        className="h-screen overflow-y-scroll h-viewport snap-y snap-mandatory"
       >
         <Hero mouseMxRef={mouseMxRef} mouseMyRef={mouseMyRef} />
         <About />

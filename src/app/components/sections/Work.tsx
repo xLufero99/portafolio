@@ -10,8 +10,7 @@ export default function Work({ parallax, onProjectHover }: WorkProps) {
   return (
     <section
       data-section-index="2"
-      className="relative h-screen overflow-hidden h-viewport"
-      style={{ backgroundColor: "#0A0A0A", scrollSnapAlign: "start" }}
+      className="relative h-screen overflow-hidden h-viewport bg-[#0A0A0A] snap-start"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 h-full">
         {PROJECTS.map((project) => (
@@ -29,40 +28,16 @@ export default function Work({ parallax, onProjectHover }: WorkProps) {
                 style={parallax(10)}
               />
             </div>
-            <div
-              className="absolute inset-0 transition-opacity duration-500"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 50%, transparent 100%)",
-                opacity: 1,
-              }}
-            />
+            <div className="absolute inset-0 transition-opacity duration-500 bg-gradient-to-t from-[rgba(0,0,0,0.75)] via-[rgba(0,0,0,0.2)] to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-              <span
-                className="block mb-2 font-medium"
-                style={{
-                  fontSize: "11px",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "#3DCFC4",
-                }}
-              >
+              <span className="block mb-2 font-medium text-[11px] tracking-[0.2em] uppercase text-[#3DCFC4]">
                 {project.category} — {project.year}
               </span>
               <div className="flex items-end justify-between">
-                <h3
-                  className="text-white font-bold uppercase"
-                  style={{
-                    fontSize: "clamp(18px, 2vw, 28px)",
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <h3 className="text-white font-bold uppercase text-[clamp(18px,2vw,28px)] tracking-[0.05em]">
                   {project.title}
                 </h3>
-                <span
-                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ml-4 font-bold"
-                  style={{ color: "#00E5D1", fontSize: "22px" }}
-                >
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ml-4 font-bold text-[#00E5D1] text-[22px]">
                   ↘
                 </span>
               </div>

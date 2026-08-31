@@ -11,19 +11,10 @@ export default function Services() {
   return (
     <section
       data-section-index="3"
-      className="relative h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 h-viewport"
-      style={{ backgroundColor: "#0A0A0A", scrollSnapAlign: "start" }}
+      className="relative h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 h-viewport bg-[#0A0A0A] snap-start"
     >
       <div className="mb-14">
-        <span
-          className="font-medium"
-          style={{
-            fontSize: "13px",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "#3DCFC4",
-          }}
-        />
+        <span className="font-medium text-[13px] tracking-[0.12em] uppercase text-[#3DCFC4]" />
       </div>
 
       <div className="flex flex-col">
@@ -34,42 +25,16 @@ export default function Services() {
               idx !== SERVICES.length - 1 ? "border-b border-white/10" : ""
             }`}
           >
-            <span
-              className="w-10 flex-shrink-0 font-medium"
-              style={{
-                fontSize: "11px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "#3DCFC4",
-              }}
-            >
+            <span className="w-10 flex-shrink-0 font-medium text-[11px] tracking-[0.2em] uppercase text-[#3DCFC4]">
               {service.number}
             </span>
-            <h3
-              className="text-white font-bold uppercase flex-1 min-w-[200px]"
-              style={{
-                fontSize: "clamp(18px, 3.2vw, 52px)",
-                lineHeight: 1.05,
-                letterSpacing: "-0.01em",
-              }}
-            >
+            <h3 className="text-white font-bold uppercase flex-1 min-w-[200px] text-[clamp(18px,3.2vw,52px)] leading-[1.05] tracking-[-0.01em]">
               {service.title}
             </h3>
-            <p
-              className="flex-shrink-0 leading-relaxed w-full md:w-auto"
-              style={{
-                maxWidth: "300px",
-                fontSize: "14px",
-                color: "rgba(255,255,255,0.45)",
-                lineHeight: 1.65,
-              }}
-            >
+            <p className="flex-shrink-0 w-full md:w-auto max-w-[300px] text-[14px] text-[rgba(255,255,255,0.45)] leading-[1.65]">
               {service.description}
             </p>
-            <span
-              className="flex-shrink-0 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              style={{ color: "#00E5D1", fontSize: "20px" }}
-            >
+            <span className="flex-shrink-0 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-[#00E5D1] text-[20px]">
               ↘
             </span>
           </div>
@@ -79,21 +44,10 @@ export default function Services() {
       <div className="mt-14 flex flex-wrap items-center gap-8 md:gap-12 border-t border-white/10 pt-10">
         {STATS.map(({ n, l }) => (
           <div key={l}>
-            <span
-              className="block text-white font-black"
-              style={{ fontSize: "clamp(28px, 3vw, 44px)" }}
-            >
+            <span className="block text-white font-black text-[clamp(28px,3vw,44px)]">
               {n}
             </span>
-            <span
-              className="block font-medium mt-1"
-              style={{
-                fontSize: "10px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.35)",
-              }}
-            >
+            <span className="block font-medium mt-1 text-[10px] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.35)]">
               {l}
             </span>
           </div>

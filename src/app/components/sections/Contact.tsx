@@ -4,31 +4,17 @@ export default function Contact() {
   return (
     <section
       data-section-index="4"
-      className="relative h-screen flex flex-col justify-between px-8 md:px-16 lg:px-24 py-12 md:py-24 overflow-hidden h-viewport"
-      style={{ backgroundColor: "#3DCFC4", scrollSnapAlign: "start" }}
+      className="relative h-screen flex flex-col justify-between px-8 md:px-16 lg:px-24 py-12 md:py-24 overflow-hidden h-viewport bg-[#3DCFC4] snap-start"
     >
-      <div
-        className="absolute -bottom-4 -left-4 text-black/[0.06] font-black uppercase leading-none select-none pointer-events-none"
-        style={{ fontSize: "clamp(80px, 20vw, 280px)" }}
-      >
+      <div className="absolute -bottom-4 -left-4 text-black/[0.06] font-black uppercase leading-none select-none pointer-events-none text-[clamp(80px,20vw,280px)]">
         Hello.
       </div>
 
       <div className="relative z-10">
-        <span
-          className="block mb-8 font-medium text-black/50"
-          style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase" }}
-        >
+        <span className="block mb-8 font-medium text-black/50 text-[13px] tracking-[0.12em] uppercase">
           Get In Touch
         </span>
-        <h2
-          className="text-white font-black uppercase"
-          style={{
-            fontSize: "clamp(40px, 9vw, 128px)",
-            lineHeight: 0.91,
-            letterSpacing: "-0.02em",
-          }}
-        >
+        <h2 className="text-white font-black uppercase text-[clamp(40px,9vw,128px)] leading-[0.91] tracking-[-0.02em]">
           Ready to
           <br />
           Make
@@ -43,15 +29,13 @@ export default function Contact() {
         <div className="flex flex-col gap-3">
           <a
             href="mailto:hello@phoenixstudio.co"
-            className="text-black/80 hover:text-black transition-colors duration-200 font-medium"
-            style={{ fontSize: "17px", letterSpacing: "0.01em" }}
+            className="text-black/80 hover:text-black transition-colors duration-200 font-medium text-[17px] tracking-[0.01em]"
           >
             hello@phoenixstudio.co
           </a>
           <a
             href="tel:+12125550199"
-            className="text-black/50 hover:text-black transition-colors duration-200"
-            style={{ fontSize: "15px" }}
+            className="text-black/50 hover:text-black transition-colors duration-200 text-[15px]"
           >
             +1 (212) 555-0199
           </a>
@@ -63,19 +47,14 @@ export default function Contact() {
           rel="noopener noreferrer"
           className="flex items-center gap-4 border-2 border-black/70 px-8 py-4 text-black font-semibold transition-all duration-300 hover:bg-black hover:text-primary hover:border-black"
         >
-          <span
-            style={{ fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" }}
-          >
+          <span className="text-[12px] tracking-[0.15em] uppercase">
             Start a Project
           </span>
-          <span style={{ color: "#00E5D1", fontSize: "18px" }}>↘</span>
+          <span className="text-[#00E5D1] text-[18px]">↘</span>
         </a>
 
         <div className="flex flex-col items-start md:items-end gap-3">
-          <span
-            className="text-black/40 font-medium"
-            style={{ fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}
-          >
+          <span className="text-black/40 font-medium text-[10px] tracking-[0.2em] uppercase">
             Follow Us
           </span>
           <div className="flex gap-5 flex-wrap">
@@ -83,8 +62,7 @@ export default function Contact() {
               <a
                 key={s}
                 href="#"
-                className="text-black/60 hover:text-black transition-colors duration-200 font-medium"
-                style={{ fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}
+                className="text-black/60 hover:text-black transition-colors duration-200 font-medium text-[12px] tracking-[0.1em] uppercase"
               >
                 {s}
               </a>
