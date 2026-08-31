@@ -9,10 +9,12 @@ import Services from "./components/sections/Services";
 import Contact from "./components/sections/Contact";
 import { useMousePosition } from "./hooks/useMousePosition";
 import { useActiveSection } from "./hooks/useActiveSection";
+import { useStrictTouchSnap } from "./hooks/useStrictTouchSnap";
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOnProject, setIsOnProject] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { mouseNorm, mouseMxRef, mouseMyRef, cursorTargetRef } = useMousePosition();
   const activeSection = useActiveSection();
@@ -25,6 +27,8 @@ export default function App() {
       ?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
   };
+
+  useStrictTouchSnap(scrollRef, scrollTo);
 
   const parallax = (intensity: number) => ({
     transform: `translate(${(mouseNorm.x - 0.5) * intensity}px, ${(mouseNorm.y - 0.5) * intensity}px)`,
@@ -55,7 +59,8 @@ export default function App() {
       />
 
       <div
-        className="h-screen overflow-y-scroll h-viewport snap-y snap-mandatory"
+        ref={scrollRef}
+        className="h-screen overflow-y-scroll h-viewport snap-y snap-mandatory touch-none"
       >
         <Hero mouseMxRef={mouseMxRef} mouseMyRef={mouseMyRef} />
         <About />
