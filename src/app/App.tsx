@@ -1,241 +1,33 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import fotoMia from '../assets/foto_mia.png';
 import { PROJECTS, SERVICES, SECTION_NAMES, MIS_TECNOLOGIAS } from "./data";
+import { useMousePosition } from "./hooks/useMousePosition";
+import { useCustomCursor } from "./hooks/useCustomCursor";
+import { usePhotoParallax } from "./hooks/usePhotoParallax";
+import { useWaveCanvas } from "./hooks/useWaveCanvas";
+import { useActiveSection } from "./hooks/useActiveSection";
+import { useHeroReveal } from "./hooks/useHeroReveal";
 
 export default function App() {
-  // ─── Estados globales ──────────────────────────────────────
-  const [activeSection, setActiveSection] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
   const [isOnProject, setIsOnProject] = useState(false);
-  const [mouseNorm, setMouseNorm] = useState({ x: 0.5, y: 0.5 });
 
-  // ─── Refs globales ─────────────────────────────────────────
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animRef = useRef<number>(0);
-  const mouseMxRef = useRef(0.5);
-  const mouseMyRef = useRef(0.5);
-  const cursorTargetRef = useRef({ x: -200, y: -200 });
-  const cursorCurrentRef = useRef({ x: -200, y: -200 });
+  const { mouseNorm, mouseMxRef, mouseMyRef, cursorTargetRef } = useMousePosition();
+  const activeSection = useActiveSection();
+
   const cursorDivRef = useRef<HTMLDivElement>(null);
   const isOnProjectRef = useRef(false);
   const photoWrapRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // ─── Refs para animaciones de la sección Hero ─────────────
   const heroRef = useRef<HTMLElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroPhotoRef = useRef<HTMLDivElement>(null);
 
-  // ─── Efecto: Cursor suave ─────────────────────────────────
-  useEffect(() => {
-    let raf: number;
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-    const tick = () => {
-      cursorCurrentRef.current.x = lerp(cursorCurrentRef.current.x, cursorTargetRef.current.x, 0.12);
-      cursorCurrentRef.current.y = lerp(cursorCurrentRef.current.y, cursorTargetRef.current.y, 0.12);
-
-      if (cursorDivRef.current) {
-        const offset = isOnProjectRef.current ? 40 : 4;
-        cursorDivRef.current.style.transform = `translate(${cursorCurrentRef.current.x - offset}px, ${cursorCurrentRef.current.y - offset}px)`;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  // ─── Efecto Parallax en la foto ────────────────────────────
-
-
-
-useEffect(() => {
-  let raf: number;
-  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-  
-  const photoTarget = { x: 0, y: 0 };
-  const photoCurrent = { x: 0, y: 0 };
-
-  const tick = () => {
-    const nx = mouseMxRef.current;
-    const ny = mouseMyRef.current;
-    
-    photoTarget.x = (0.5 - nx) * 30;
-    photoTarget.y = (0.5 - ny) * 30;
-    
-    photoCurrent.x = lerp(photoCurrent.x, photoTarget.x, 0.08);
-    photoCurrent.y = lerp(photoCurrent.y, photoTarget.y, 0.08);
-    
-    if (photoWrapRef.current) {
-      photoWrapRef.current.style.transform = `translate(${photoCurrent.x}px, ${photoCurrent.y}px)`;
-    }
-    
-    raf = requestAnimationFrame(tick);
-  };
-  
-  // 🔥 CONDICIÓN: SOLO EJECUTAR EN DESKTOP
-  const isMobile = window.innerWidth <= 768;
-  if (!isMobile) {
-    raf = requestAnimationFrame(tick);
-  }
-  
-  return () => {
-    if (raf) cancelAnimationFrame(raf);
-  };
-}, []);
-  
-
-
-
-
-
-  // ─── Efecto: Seguimiento del mouse ────────────────────────
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      cursorTargetRef.current = { x: e.clientX, y: e.clientY };
-      setCursorPos({ x: e.clientX, y: e.clientY });
-      const nx = e.clientX / window.innerWidth;
-      const ny = e.clientY / window.innerHeight;
-      mouseMxRef.current = nx;
-      mouseMyRef.current = ny;
-      setMouseNorm({ x: nx, y: ny });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  // ─── Efecto: Animación de olas (canvas) ───────────────────
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let t = 0;
-
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const draw = () => {
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      ctx.clearRect(0, 0, w, h);
-
-      const mx = mouseMxRef.current;
-      const my = mouseMyRef.current;
-
-      // Wave layer 1 — tealDark bleed
-      ctx.beginPath();
-      ctx.moveTo(0, h * 0.45);
-      for (let x = 0; x <= w; x += 2) {
-        const y =
-          h * 0.45 +
-          Math.sin((x / w) * Math.PI * 5 + t + mx * 2.5) * (28 + my * 18);
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(w, h);
-      ctx.lineTo(0, h);
-      ctx.closePath();
-      ctx.fillStyle = "rgba(29,168,158,0.45)";
-      ctx.fill();
-
-      // Wave layer 2 — deep black
-      ctx.beginPath();
-      ctx.moveTo(0, h * 0.6);
-      for (let x = 0; x <= w; x += 2) {
-        const y =
-          h * 0.6 +
-          Math.sin((x / w) * Math.PI * 4 + t * 1.4 + mx) * (20 + my * 12);
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(w, h);
-      ctx.lineTo(0, h);
-      ctx.closePath();
-      ctx.fillStyle = "rgba(10,10,10,0.65)";
-      ctx.fill();
-
-      t += 0.014;
-      animRef.current = requestAnimationFrame(draw);
-    };
-    animRef.current = requestAnimationFrame(draw);
-
-    return () => {
-      cancelAnimationFrame(animRef.current);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
-  // ─── Efecto: Detectar sección activa ──────────────────────
-  useEffect(() => {
-    const els = document.querySelectorAll("[data-section-index]");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = parseInt(
-              entry.target.getAttribute("data-section-index") ?? "0"
-            );
-            setActiveSection(idx);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  // ─── 👇 NUEVO: Efecto para reiniciar animaciones de Hero al hacer scroll ──
-  useEffect(() => {
-    if (!heroRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Reiniciar animación del contenido textual (FullStack DV + Daniel Gomez)
-            if (heroContentRef.current) {
-              const el = heroContentRef.current;
-              // Quitar transiciones temporalmente para resetear
-              el.style.transition = 'none';
-              el.style.opacity = '0';
-              el.style.transform = 'translateY(40px)';
-              // Forzar reflow
-              void el.offsetHeight;
-              // Restaurar transición y valores finales
-              el.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s';
-              el.style.opacity = '1';
-              el.style.transform = 'translateY(0)';
-            }
-
-            // Reiniciar animación de la foto
-            if (heroPhotoRef.current) {
-              const el = heroPhotoRef.current;
-              el.style.transition = 'none';
-              el.style.opacity = '0';
-              el.style.transform = 'translateY(60px)';
-              void el.offsetHeight;
-              el.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s';
-              el.style.opacity = '1';
-              el.style.transform = 'translateY(0)';
-            }
-          }
-        });
-      },
-      { threshold: 0.3 } // Se activa cuando el 30% de la sección es visible
-    );
-
-    observer.observe(heroRef.current);
-    return () => observer.disconnect();
-  }, []);
+  useCustomCursor(cursorDivRef, isOnProjectRef, cursorTargetRef);
+  usePhotoParallax(photoWrapRef, mouseMxRef, mouseMyRef);
+  useWaveCanvas(canvasRef, mouseMxRef, mouseMyRef);
+  useHeroReveal(heroRef, heroContentRef, heroPhotoRef);
 
   // ─── Funciones globales ────────────────────────────────────
   const scrollTo = (idx: number) => {
