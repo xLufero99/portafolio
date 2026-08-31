@@ -12,7 +12,7 @@ export default function Work({ parallax, onProjectHover }: WorkProps) {
       data-section-index="2"
       className="relative h-screen overflow-hidden h-viewport bg-[#0A0A0A] snap-start"
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-12 grid grid-cols-1 md:grid-cols-2 h-full">
         {PROJECTS.map((project) => (
           <div
             key={project.id}
@@ -20,6 +20,15 @@ export default function Work({ parallax, onProjectHover }: WorkProps) {
             onMouseEnter={() => onProjectHover(true)}
             onMouseLeave={() => onProjectHover(false)}
           >
+            {project.url && (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-0 z-10"
+                aria-label={`Ver ${project.title}`}
+              />
+            )}
             <div className="w-full h-full bg-card overflow-hidden">
               <img
                 src={project.image}

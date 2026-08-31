@@ -3,6 +3,7 @@ export interface Project {
   title: string;
   category: string;
   year: string;
+  url?: string;
   image: string;
 }
 
@@ -21,35 +22,12 @@ export interface TechSkill {
 export const PROJECTS: Project[] = [
   {
     id: 1,
-    title: "Noir Editorial",
-    category: "Photography",
-    year: "2024",
+    title: "Duelith",
+    category: "Esports",
+    year: "2026",
+    url: "https://duelith.pages.dev",
     image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&h=700&fit=crop&auto=format",
-  },
-  {
-    id: 2,
-    title: "Flux Identity",
-    category: "Branding",
-    year: "2024",
-    image:
-      "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=900&h=700&fit=crop&auto=format",
-  },
-  {
-    id: 3,
-    title: "Obsidian Campaign",
-    category: "Art Direction",
-    year: "2023",
-    image:
-      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=900&h=700&fit=crop&auto=format",
-  },
-  {
-    id: 4,
-    title: "Luminary Film",
-    category: "Film & Motion",
-    year: "2023",
-    image:
-      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=900&h=700&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&h=700&fit=crop&auto=format",
   },
 ];
 
