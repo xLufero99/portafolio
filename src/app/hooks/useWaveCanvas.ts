@@ -1,10 +1,6 @@
 import { useEffect, type RefObject } from "react";
 
-export function useWaveCanvas(
-  canvasRef: RefObject<HTMLCanvasElement | null>,
-  mouseMxRef: RefObject<number>,
-  mouseMyRef: RefObject<number>
-) {
+export function useWaveCanvas(canvasRef: RefObject<HTMLCanvasElement | null>) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -13,32 +9,27 @@ export function useWaveCanvas(
 
     let t = 0;
     let raf = 0;
+    let w = 0;
+    let h = 0;
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
+      w = canvas.offsetWidth;
+      h = canvas.offsetHeight;
       canvas.width = w * dpr;
       canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
     const draw = () => {
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
       ctx.clearRect(0, 0, w, h);
-
-      const mx = mouseMxRef.current;
-      const my = mouseMyRef.current;
 
       ctx.beginPath();
       ctx.moveTo(0, h * 0.45);
       for (let x = 0; x <= w; x += 2) {
-        const y =
-          h * 0.45 +
-          Math.sin((x / w) * Math.PI * 5 + t + mx * 2.5) * (28 + my * 18);
+        const y = h * 0.45 + Math.sin((x / w) * Math.PI * 5 + t) * 28;
         ctx.lineTo(x, y);
       }
       ctx.lineTo(w, h);
@@ -51,8 +42,7 @@ export function useWaveCanvas(
       ctx.moveTo(0, h * 0.6);
       for (let x = 0; x <= w; x += 2) {
         const y =
-          h * 0.6 +
-          Math.sin((x / w) * Math.PI * 4 + t * 1.4 + mx) * (20 + my * 12);
+          h * 0.6 + Math.sin((x / w) * Math.PI * 4 + t * 1.4) * 20;
         ctx.lineTo(x, y);
       }
       ctx.lineTo(w, h);
@@ -70,5 +60,5 @@ export function useWaveCanvas(
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
     };
-  }, [canvasRef, mouseMxRef, mouseMyRef]);
+  }, [canvasRef]);
 }

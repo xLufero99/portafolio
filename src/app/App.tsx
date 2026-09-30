@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import CustomCursor from "./components/layout/CustomCursor";
 import GlobalStyles from "./components/layout/GlobalStyles";
 import PortfolioChrome from "./components/layout/PortfolioChrome";
 import Hero from "./components/sections/Hero";
@@ -13,13 +12,10 @@ import { useStrictTouchSnap } from "./hooks/useStrictTouchSnap";
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isOnProject, setIsOnProject] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { mouseNorm, mouseMxRef, mouseMyRef, cursorTargetRef } = useMousePosition();
+  const { mouseMxRef, mouseMyRef } = useMousePosition();
   const activeSection = useActiveSection();
-
-  const isOnProjectRef = useRef(false);
 
   const scrollTo = (idx: number) => {
     document
@@ -30,27 +26,12 @@ export default function App() {
 
   useStrictTouchSnap(scrollRef, scrollTo);
 
-  const parallax = (intensity: number) => ({
-    transform: `translate(${(mouseNorm.x - 0.5) * intensity}px, ${(mouseNorm.y - 0.5) * intensity}px)`,
-    transition: "transform 0.08s linear",
-  });
-
-  const setOnProject = (val: boolean) => {
-    isOnProjectRef.current = val;
-    setIsOnProject(val);
-  };
-
   return (
     <div
       className="bg-background text-foreground"
       style={{ fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}
     >
       <GlobalStyles />
-      <CustomCursor
-        isOnProject={isOnProject}
-        isOnProjectRef={isOnProjectRef}
-        cursorTargetRef={cursorTargetRef}
-      />
       <PortfolioChrome
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
@@ -64,7 +45,7 @@ export default function App() {
       >
         <Hero mouseMxRef={mouseMxRef} mouseMyRef={mouseMyRef} />
         <About />
-        <Work parallax={parallax} onProjectHover={setOnProject} />
+        <Work />
         <Services />
         <Contact />
       </div>

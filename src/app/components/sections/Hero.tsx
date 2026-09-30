@@ -22,7 +22,7 @@ export default function Hero({ mouseMxRef, mouseMyRef }: HeroProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const photoWrapRef = useRef<HTMLDivElement>(null);
 
-  useWaveCanvas(canvasRef, mouseMxRef, mouseMyRef);
+  useWaveCanvas(canvasRef);
   usePhotoParallax(photoWrapRef, mouseMxRef, mouseMyRef);
   useHeroReveal(heroRef, heroContentRef, heroPhotoRef);
 

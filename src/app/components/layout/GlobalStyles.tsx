@@ -1,7 +1,6 @@
 export default function GlobalStyles() {
   return (
     <style>{`
-  * { cursor: none !important; }
   ::-webkit-scrollbar { display: none; }
   html, body { scrollbar-width: none; overflow: hidden; }
 
@@ -24,14 +23,6 @@ export default function GlobalStyles() {
   @media (max-width: 768px) {
   .mobile-hidden {
     display: none !important;
-  }
-
-  .fixed.top-0.left-0.z-\\[9999\\] {
-    display: none !important;
-  }
-
-  * {
-    cursor: auto !important;
   }
 
   .hero-container {
