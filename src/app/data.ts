@@ -29,6 +29,15 @@ export const PROJECTS: Project[] = [
     image:
       "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&h=700&fit=crop&auto=format",
   },
+  {
+    id: 2,
+    title: "Cinepacho",
+    category: "Web App",
+    year: "2026",
+    url: "https://cinepacho.pages.dev/",
+    image:
+      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=900&h=700&fit=crop&auto=format",
+  },
 ];
 
 export const MIS_TECNOLOGIAS: TechSkill[] = [
