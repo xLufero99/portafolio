@@ -9,6 +9,7 @@ import Contact from "./components/sections/Contact";
 import { useMousePosition } from "./hooks/useMousePosition";
 import { useActiveSection } from "./hooks/useActiveSection";
 import { useStrictTouchSnap } from "./hooks/useStrictTouchSnap";
+import { useWheelSnap } from "./hooks/useWheelSnap";
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function App() {
   };
 
   useStrictTouchSnap(scrollRef, scrollTo);
+  useWheelSnap(scrollRef, scrollTo);
 
   return (
     <div
@@ -41,7 +43,7 @@ export default function App() {
 
       <div
         ref={scrollRef}
-        className="h-screen overflow-y-scroll h-viewport snap-y snap-mandatory touch-none"
+        className="h-screen overflow-y-scroll h-viewport snap-y snap-mandatory touch-none scroll-smooth overscroll-contain"
       >
         <Hero mouseMxRef={mouseMxRef} mouseMyRef={mouseMyRef} />
         <About />
