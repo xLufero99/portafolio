@@ -88,7 +88,7 @@ export default function Hero({ mouseMxRef, mouseMyRef }: HeroProps) {
         >
           <div
             ref={photoWrapRef}
-            className="w-full h-full bg-cover bg-center bg-no-repeat"
+            className="w-full h-full bg-cover bg-top bg-no-repeat"
             style={{ backgroundImage: `url(${fotoMia})` }}
           />
         </div>

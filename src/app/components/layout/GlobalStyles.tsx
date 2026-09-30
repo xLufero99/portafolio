@@ -60,7 +60,7 @@ export default function GlobalStyles() {
   }
 
   .hero-photo div {
-    background-position: 55% center !important;
+    background-position: 55% top !important;
   }
 
   .hero-info-box {
