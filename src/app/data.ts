@@ -38,6 +38,15 @@ export const PROJECTS: Project[] = [
     image:
       "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=900&h=700&fit=crop&auto=format",
   },
+  {
+    id: 3,
+    title: "Moodly Watch",
+    category: "AI Recommender",
+    year: "2026",
+    url: "https://moodly-watch.pages.dev/",
+    image:
+      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=900&h=700&fit=crop&auto=format",
+  },
 ];
 
 export const MIS_TECNOLOGIAS: TechSkill[] = [
