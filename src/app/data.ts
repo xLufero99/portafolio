@@ -47,6 +47,15 @@ export const PROJECTS: Project[] = [
     image:
       "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=900&h=700&fit=crop&auto=format",
   },
+  {
+    id: 4,
+    title: "GitHub",
+    category: "Open Source",
+    year: "2026",
+    url: "https://github.com/xLufero99",
+    image:
+      "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=900&h=700&fit=crop&auto=format",
+  },
 ];
 
 export const MIS_TECNOLOGIAS: TechSkill[] = [
